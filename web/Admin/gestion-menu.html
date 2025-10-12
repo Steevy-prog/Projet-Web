@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Menu - Zeduc Space</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">RestauAdmin</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard-admin.html">Dashboard</a></li>
+                    <li><a href="gestion-workers.html">Employés</a></li>
+                    <li><a href="gestion-menu.html" class="active">Gestion Menu</a></li>
+                    <li><a href="gestion-promo.html">Promotions</a></li>
+                    <li><a href="admin-reclamation.html">Réclamations</a></li>
+                    <li><a href="setting.html">Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="admin-info">
+                <span>Administrateur</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Content -->
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Gestion du Menu</h1>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-item">
+                <span class="menu-category">Plat principal</span>
+                <h3>Steak de Bœuf Grillé</h3>
+                <p>Steak de bœuf premium grillé, accompagné de légumes de saison et pommes de terre rôties</p>
+                <p style="color: var(--medium-gray); font-size: 0.9rem;">Préparation 15min</p>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn">Modifier</button>
+                    <div style="display: flex; gap: 10px;">
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <span class="menu-category">Entrée</span>
+                <h3>Salade César</h3>
+                <p>Salade romaine, croûtons, parmesan, sauce césar maison et blanc de poulet grillé</p>
+                <p style="color: var(--medium-gray); font-size: 0.9rem;">Préparation 5min</p>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn">Modifier</button>
+                    <div style="display: flex; gap: 10px;">
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <span class="menu-category">Boisson</span>
+                <h3>Vin Rouge Bordeaux</h3>
+                <p>Bordeaux rouge AOC, millésime 2019, notes de fruits rouges et épices</p>
+                <p style="color: var(--medium-gray); font-size: 0.9rem;">Verre 150ml</p>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn">Modifier</button>
+                    <div style="display: flex; gap: 10px;">
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                        <span class="status-badge status-active">Disponible</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Item -->
+            <div class="card">
+                <h2>Ajouter un Nouveau Plat</h2>
+                <form style="margin-top: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="item-name">Nom du plat</label>
+                            <input type="text" id="item-name" name="item-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-category">Catégorie</label>
+                            <select id="item-category" name="item-category" required>
+                                <option value="">Sélectionnez une catégorie</option>
+                                <option value="entree">Entrée</option>
+                                <option value="plat">Plat principal</option>
+                                <option value="dessert">Dessert</option>
+                                <option value="boisson">Boisson</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-description">Description</label>
+                        <textarea id="item-description" name="item-description" required></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="item-price">Prix (€)</label>
+                            <input type="number" id="item-price" name="item-price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-prep-time">Temps de préparation</label>
+                            <input type="text" id="item-prep-time" name="item-prep-time" placeholder="ex: 15min">
+                        </div>
+                        <div class="form-group">
+                            <label for="item-status">Statut</label>
+                            <select id="item-status" name="item-status" required>
+                                <option value="available">Disponible</option>
+                                <option value="unavailable">Indisponible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Ajouter le plat</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>INFO UTILE</h3>
+                    <ul>
+                        <li>CITE LA TERRASE DOUALA YANSOKI</li>
+                        <li>+237 623 45 67 89</li>
+                        <li>RESERVATION@ZEDUCSPACE.COM</li>
+                        <li>OUVERT DU LUNDI AU DIMANCHE 15H - 21H</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>CONTACT</h3>
+                    <ul>
+                        <li><a href="instagramcom">Instagram</a></li>
+                        <li><a href="Whatsapp.com">Whatsapp</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>MOYENS DE PAIEMENT</h3>
+                    <ul>
+                        <li>Carte bancaire</li>
+                        <li>Espèces</li>
+                        <li>Mobile Money</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 RESTAURANT ZEDUC – TOUS DROITS RÉSERVÉS
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
