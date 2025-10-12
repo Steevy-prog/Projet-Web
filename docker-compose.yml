@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Service Backend (Laravel)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - app-network
+
+  # Service Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react_app
+    volumes:
+      - ./frontend:/app # Pour le développement, si tu veux synchroniser les fichiers
+    networks:
+      - app-network
+
+  # Service Base de données (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE} # Utilise les variables de ton .env
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # Ou un mot de passe root séparé
+    volumes:
+      - db-data:/var/lib/mysql # Le volume pour que les données persistent
+    ports:
+      - "33066:3306" # Mappe le port 3306 du conteneur au port 33066 de ta machine
+    networks:
+      - app-network
+
+  # Service Serveur Web (Nginx)
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx_server
+    restart: unless-stopped
+    ports:
+      - "8080:80" # Accède à ton application via http://localhost:8080
+    volumes:
+      - ./backend:/var/www/html # Nginx a aussi besoin d'accès aux fichiers Laravel
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+
+# Définition du réseau et du volume
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
