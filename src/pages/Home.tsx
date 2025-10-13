@@ -1,175 +1,176 @@
+import React from 'react';
 import { motion } from 'motion/react';
+import { ChevronRight, Utensils, Award, Sparkles } from 'lucide-react';
+import { menuItems } from '../lib/data';
+import { Button } from '../components/ui/button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { menuItems } from '../data/mockData';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
 
-export function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const featuredMenus = menuItems.slice(0, 3);
+interface HomeProps {
+  onNavigate: (page: string) => void;
+}
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % featuredMenus.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + featuredMenus.length) % featuredMenus.length);
-  };
+export function Home({ onNavigate }: HomeProps) {
+  const popularMenus = menuItems.filter((item) => item.popular);
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0b0d] via-transparent to-[#0b0b0d]" />
+      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background z-10" />
+        <ImageWithFallback
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80"
+          alt="Restaurant"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         
         <motion.div
-          className="relative z-10 text-center px-6 max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-20 text-center px-4 max-w-4xl mx-auto"
         >
-          <motion.h1
-            className="text-6xl md:text-8xl lg:text-9xl mb-8 bg-gradient-to-r from-white via-[#b88b1f] to-white bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.2 }}
-          >
-            Zeduc
-          </motion.h1>
-
           <motion.div
-            className="w-32 h-px bg-gradient-to-r from-transparent via-[#b88b1f] to-transparent mx-auto mb-8"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          />
-
-          <motion.p
-            className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: 'spring' }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-sm mb-6"
           >
-            Une expérience gastronomique exceptionnelle où tradition et innovation se rencontrent
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.2 }}
-          >
-            <button className="px-10 py-4 bg-gradient-to-r from-[#b88b1f] to-[#d4a74a] text-black rounded-2xl hover:shadow-lg hover:shadow-[#b88b1f]/30 transition-all duration-300">
-              Découvrir nos menus
-            </button>
+            <Sparkles className="size-4 text-primary" />
+            <span className="text-sm text-primary">Programme de fidélité exclusif</span>
           </motion.div>
-        </motion.div>
 
-        {/* Floating particles */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-[#b88b1f]/20 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0, 1, 0],
-                scale: [0, 1.5, 0],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
+          <h1 className="text-5xl md:text-6xl mb-6 text-foreground">
+            L'Excellence Culinaire <span className="text-primary">à Portée de Main</span>
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Découvrez une expérience gastronomique unique alliant saveurs authentiques et innovation
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Button
+              onClick={() => onNavigate('menus')}
+              size="lg"
+              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              Découvrir nos menus
+              <ChevronRight className="ml-2 size-5" />
+            </Button>
+            <Button
+              onClick={() => onNavigate('login')}
+              size="lg"
+              variant="outline"
+              className="rounded-full border-primary text-primary hover:bg-primary/10"
+            >
+              Rejoindre le programme
+            </Button>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Popular Menus Carousel */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl mb-4 text-foreground">Nos Plats <span className="text-primary">Populaires</span></h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Découvrez nos créations les plus appréciées par nos clients
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {popularMenus.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="bg-card border border-border rounded-2xl overflow-hidden group cursor-pointer"
+                onClick={() => onNavigate('menus')}
+              >
+                <div className="relative h-64 overflow-hidden">
+                  <ImageWithFallback
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-xl text-white mb-1">{item.name}</h3>
+                    <p className="text-sm text-white/80 line-clamp-2">{item.description}</p>
+                  </div>
+                </div>
+                <div className="p-5 flex items-center justify-between">
+                  <span className="text-primary text-xl">{item.price.toFixed(2)}€</span>
+                  <ChevronRight className="size-5 text-primary group-hover:translate-x-1 transition-transform" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <Button
+              onClick={() => onNavigate('menus')}
+              size="lg"
+              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              Voir tous les menus
+              <ChevronRight className="ml-2 size-5" />
+            </Button>
+          </motion.div>
         </div>
       </section>
 
-      {/* Carousel Section */}
-      <section className="py-24 px-6 bg-gradient-to-b from-[#0b0b0d] to-[#12121a]">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-4xl md:text-5xl bg-gradient-to-r from-white via-[#b88b1f] to-white bg-clip-text text-transparent mb-4">
-              Nos Spécialités
-            </h2>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#b88b1f] to-transparent mx-auto" />
-          </motion.div>
-
-          {/* Carousel */}
-          <div className="relative">
-            <div className="overflow-hidden rounded-3xl">
-              <motion.div
-                className="flex transition-transform duration-500 ease-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {featuredMenus.map((menu) => (
-                  <div key={menu.id} className="min-w-full px-4">
-                    <div className="bg-black/30 backdrop-blur-sm border border-[#b88b1f]/20 rounded-3xl overflow-hidden">
-                      <div className="grid md:grid-cols-2 gap-8">
-                        <div className="relative h-96 md:h-auto">
-                          <ImageWithFallback
-                            src={menu.image}
-                            alt={menu.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        </div>
-                        <div className="p-8 md:p-12 flex flex-col justify-center">
-                          <span className="text-[#b88b1f] text-sm mb-2">{menu.category}</span>
-                          <h3 className="text-3xl md:text-4xl mb-4">{menu.name}</h3>
-                          <p className="text-gray-400 mb-6 leading-relaxed">{menu.description}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-2xl text-[#b88b1f]">{menu.price}€</span>
-                            <button className="px-6 py-3 bg-[#b88b1f]/20 border border-[#b88b1f]/30 text-[#b88b1f] rounded-2xl hover:bg-[#b88b1f]/30 transition-all duration-300">
-                              Commander
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Navigation Buttons */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 backdrop-blur-sm border border-[#b88b1f]/20 rounded-2xl hover:border-[#b88b1f]/40 transition-all duration-300"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="w-6 h-6 text-[#b88b1f]" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 backdrop-blur-sm border border-[#b88b1f]/20 rounded-2xl hover:border-[#b88b1f]/40 transition-all duration-300"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-6 h-6 text-[#b88b1f]" />
-            </button>
-
-            {/* Dots */}
-            <div className="flex justify-center gap-2 mt-6">
-              {featuredMenus.map((_, index) => (
-                <button
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-secondary/30">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Utensils,
+                title: 'Cuisine d\'Excellence',
+                description: 'Des plats préparés par nos chefs avec des ingrédients premium',
+              },
+              {
+                icon: Award,
+                title: 'Programme de Fidélité',
+                description: 'Gagnez des points et profitez de récompenses exclusives',
+              },
+              {
+                icon: Sparkles,
+                title: 'Jeux & Événements',
+                description: 'Participez à des jeux interactifs et gagnez des bonus',
+              },
+            ].map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
                   key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentSlide ? 'w-8 bg-[#b88b1f]' : 'w-2 bg-[#b88b1f]/30'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center p-8 rounded-2xl bg-card border border-border"
+                >
+                  <div className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4">
+                    <Icon className="size-8 text-primary" />
+                  </div>
+                  <h3 className="mb-3 text-foreground">{feature.title}</h3>
+                  <p className="text-muted-foreground">{feature.description}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

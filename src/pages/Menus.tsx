@@ -1,98 +1,108 @@
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { menuItems } from '../data/mockData';
-import { ShoppingCart } from 'lucide-react';
-import { useState } from 'react';
+import { Search, Filter } from 'lucide-react';
+import { menuItems } from '../lib/data';
+import { MenuCard } from '../components/MenuCard';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { toast } from 'sonner@2.0.3';
 
 export function Menus() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Tous');
-  
-  const categories = ['Tous', ...new Set(menuItems.map((item) => item.category))];
-  
-  const filteredMenus = selectedCategory === 'Tous' 
-    ? menuItems 
-    : menuItems.filter((item) => item.category === selectedCategory);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  const categories = ['all', ...Array.from(new Set(menuItems.map((item) => item.category)))];
+
+  const filteredMenus = menuItems.filter((item) => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleAddToCart = () => {
+    toast.success('Veuillez vous connecter pour ajouter des articles au panier');
+  };
 
   return (
-    <div className="min-h-screen py-24 px-6">
-      <div className="container mx-auto max-w-7xl">
+    <div className="min-h-screen py-12 px-4">
+      <div className="container mx-auto">
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-7xl bg-gradient-to-r from-white via-[#b88b1f] to-white bg-clip-text text-transparent mb-6">
-            Nos Menus
+          <h1 className="text-4xl md:text-5xl mb-4 text-foreground">
+            Notre <span className="text-primary">Carte</span>
           </h1>
-          <div className="w-32 h-px bg-gradient-to-r from-transparent via-[#b88b1f] to-transparent mx-auto mb-8" />
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Découvrez notre sélection de plats raffinés préparés par notre chef étoilé
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Découvrez notre sélection de plats préparés avec passion par nos chefs
           </p>
         </motion.div>
 
-        {/* Category Filter */}
+        {/* Search and Filter */}
         <motion.div
-          className="flex flex-wrap justify-center gap-4 mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ delay: 0.1 }}
+          className="mb-8 space-y-4"
         >
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-2xl transition-all duration-300 ${
-                selectedCategory === category
-                  ? 'bg-[#b88b1f] text-black'
-                  : 'bg-black/30 border border-[#b88b1f]/20 text-gray-300 hover:border-[#b88b1f]/40'
-              }`}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Rechercher un plat..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 rounded-2xl bg-input-background border-input"
+              />
+            </div>
+            <Button
+              variant="outline"
+              className="rounded-2xl border-primary text-primary hover:bg-primary/10 md:w-auto"
             >
-              {category}
-            </button>
-          ))}
+              <Filter className="size-5 mr-2" />
+              Filtres
+            </Button>
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                variant={selectedCategory === category ? 'default' : 'outline'}
+                className={`rounded-full ${
+                  selectedCategory === category
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'border-border hover:bg-secondary'
+                }`}
+              >
+                {category === 'all' ? 'Tous' : category}
+              </Button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Menu Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredMenus.map((menu, index) => (
-            <motion.div
-              key={menu.id}
-              className="group bg-black/30 backdrop-blur-sm border border-[#b88b1f]/20 rounded-3xl overflow-hidden hover:border-[#b88b1f]/40 transition-all duration-300"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="relative h-64 overflow-hidden">
-                <ImageWithFallback
-                  src={menu.image}
-                  alt={menu.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                <span className="absolute top-4 right-4 px-4 py-2 bg-[#b88b1f]/90 backdrop-blur-sm text-black text-sm rounded-2xl">
-                  {menu.category}
-                </span>
-              </div>
-
-              <div className="p-6">
-                <h3 className="text-2xl mb-3">{menu.name}</h3>
-                <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                  {menu.description}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl text-[#b88b1f]">{menu.price}€</span>
-                  <button className="flex items-center gap-2 px-5 py-3 bg-[#b88b1f]/20 border border-[#b88b1f]/30 text-[#b88b1f] rounded-2xl hover:bg-[#b88b1f] hover:text-black transition-all duration-300">
-                    <ShoppingCart className="w-4 h-4" />
-                    Acheter
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredMenus.map((item) => (
+            <MenuCard key={item.id} item={item} onAddToCart={handleAddToCart} />
           ))}
         </div>
+
+        {filteredMenus.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <p className="text-muted-foreground">Aucun plat trouvé pour votre recherche</p>
+          </motion.div>
+        )}
       </div>
     </div>
   );

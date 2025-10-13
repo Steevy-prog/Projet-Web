@@ -1,110 +1,157 @@
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { useState } from 'react';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { LogIn, UserPlus } from 'lucide-react';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { useApp } from '../lib/context';
+import { toast } from 'sonner@2.0.3';
 
 interface LoginProps {
-  onLogin: () => void;
+  onNavigate: (page: string) => void;
 }
 
-export function Login({ onLogin }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export function Login({ onNavigate }: LoginProps) {
+  const { setUser } = useApp();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock authentication
-    if (email && password) {
-      onLogin();
+    
+    if (!formData.email || !formData.password) {
+      toast.error('Veuillez remplir tous les champs requis');
+      return;
     }
+
+    if (isSignUp && !formData.name) {
+      toast.error('Veuillez entrer votre nom');
+      return;
+    }
+
+    // Mock user login
+    const mockUser = {
+      id: '1',
+      name: formData.name || 'Utilisateur',
+      email: formData.email,
+      loyaltyPoints: 450,
+      gamesPlayed: 12,
+      ordersCount: 8,
+      rank: 15,
+    };
+
+    setUser(mockUser);
+    toast.success(`Bienvenue ${mockUser.name} !`);
+    onNavigate('user-home');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-24">
-      <div className="w-full max-w-md">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-5xl md:text-6xl bg-gradient-to-r from-white via-[#b88b1f] to-white bg-clip-text text-transparent mb-6">
-            Connexion
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md"
+      >
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', delay: 0.1 }}
+            className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4"
+          >
+            {isSignUp ? (
+              <UserPlus className="size-8 text-primary" />
+            ) : (
+              <LogIn className="size-8 text-primary" />
+            )}
+          </motion.div>
+          <h1 className="text-3xl mb-2 text-foreground">
+            {isSignUp ? 'Créer un compte' : 'Connexion'}
           </h1>
-          <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#b88b1f] to-transparent mx-auto mb-6" />
-          <p className="text-gray-400">
-            Accédez à votre espace personnel
+          <p className="text-muted-foreground">
+            {isSignUp
+              ? 'Rejoignez notre programme de fidélité'
+              : 'Accédez à votre espace personnel'}
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="bg-black/30 backdrop-blur-sm border border-[#b88b1f]/20 rounded-3xl p-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-gray-300 mb-2">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#b88b1f]/60" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-black/40 border border-[#b88b1f]/30 rounded-2xl text-white placeholder-gray-500 focus:border-[#b88b1f] focus:outline-none transition-colors duration-300"
-                  placeholder="votre@email.com"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-gray-300 mb-2">Mot de passe</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#b88b1f]/60" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-black/40 border border-[#b88b1f]/30 rounded-2xl text-white placeholder-gray-500 focus:border-[#b88b1f] focus:outline-none transition-colors duration-300"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center text-gray-400">
-                <input
-                  type="checkbox"
-                  className="mr-2 rounded accent-[#b88b1f]"
-                />
-                Se souvenir de moi
-              </label>
-              <a href="#" className="text-[#b88b1f] hover:text-[#d4a74a] transition-colors">
-                Mot de passe oublié ?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-[#b88b1f] to-[#d4a74a] text-black rounded-2xl hover:shadow-lg hover:shadow-[#b88b1f]/30 transition-all duration-300 group"
+        <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-8 space-y-6">
+          {isSignUp && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="space-y-2"
             >
-              Se connecter
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </form>
+              <Label htmlFor="name">Nom complet</Label>
+              <Input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Jean Dupont"
+                className="rounded-2xl bg-input-background border-input"
+              />
+            </motion.div>
+          )}
 
-          <div className="mt-8 text-center">
-            <p className="text-gray-400">
-              Pas encore de compte ?{' '}
-              <a href="#" className="text-[#b88b1f] hover:text-[#d4a74a] transition-colors">
-                Créer un compte
-              </a>
-            </p>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="jean.dupont@example.com"
+              className="rounded-2xl bg-input-background border-input"
+            />
           </div>
-        </motion.div>
-      </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Mot de passe</Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="••••••••"
+              className="rounded-2xl bg-input-background border-input"
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {isSignUp ? (
+              <>
+                <UserPlus className="size-5 mr-2" />
+                S'inscrire
+              </>
+            ) : (
+              <>
+                <LogIn className="size-5 mr-2" />
+                Se connecter
+              </>
+            )}
+          </Button>
+
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm text-primary hover:underline"
+            >
+              {isSignUp
+                ? 'Déjà un compte ? Se connecter'
+                : 'Pas de compte ? S\'inscrire'}
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 }

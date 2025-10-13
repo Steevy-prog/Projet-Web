@@ -1,7 +1,7 @@
 
-  # Luxurious Minimalist Web Page
+  # Restaurant Web App Design
 
-  This is a code bundle for Luxurious Minimalist Web Page. The original project is available at https://www.figma.com/design/eAMzxJQsMon1zaq95WgoZL/Luxurious-Minimalist-Web-Page.
+  This is a code bundle for Restaurant Web App Design. The original project is available at https://www.figma.com/design/DittePzSraeaaxhO67kEnA/Restaurant-Web-App-Design.
 
   ## Running the code
 
