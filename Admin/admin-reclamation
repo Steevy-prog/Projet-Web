@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réclamations Admin - Zeduc Space</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">RestauAdmin</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard-admin.html">Dashboard</a></li>
+                    <li><a href="gestion-workers.html">Employés</a></li>
+                    <li><a href="gestion-menu.html">Gestion Menu</a></li>
+                    <li><a href="gestion-promo.html">Promotions</a></li>
+                    <li><a href="admin-reclamation.html" class="active">Réclamations</a></li>
+                    <li><a href="setting.html">Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="admin-info">
+                <span>Administrateur</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Reclamations Content -->
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Suivi des Réclamations</h1>
+                <p>Gérez et suivez toutes les réclamations étudiantes</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="card">
+                <h2>Filtres et Recherche</h2>
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div class="form-group">
+                        <input type="text" placeholder="Rechercher...">
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option>Tous les statuts</option>
+                            <option>En attente</option>
+                            <option>En cours</option>
+                            <option>Résolu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option>Toutes priorités</option>
+                            <option>Urgente</option>
+                            <option>Haute</option>
+                            <option>Moyenne</option>
+                            <option>Basse</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option>Toutes catégories</option>
+                            <option>Technique</option>
+                            <option>Académique</option>
+                            <option>Financière</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" placeholder="mm/dd/yyyy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Claims List -->
+            <div class="card">
+                <h2>Liste des Réclamations</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Étudiant</th>
+                            <th>Sujet</th>
+                            <th>Catégorie</th>
+                            <th>Priorité</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#2024-001</strong></td>
+                            <td>Marie Dubois</td>
+                            <td>Problème d'accès à la plateforme</td>
+                            <td>Technique</td>
+                            <td><span style="color: #dc3545; font-weight: bold;">Haute</span></td>
+                            <td><span class="status-badge status-pending">En attente</span></td>
+                            <td>15/03/2024</td>
+                            <td>
+                                <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;">Traiter</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#2024-002</strong></td>
+                            <td>Pierre Martin</td>
+                            <td>Note incorrecte en mathématiques</td>
+                            <td>Académique</td>
+                            <td><span style="color: #ffc107; font-weight: bold;">Moyenne</span></td>
+                            <td><span class="status-badge status-in-progress">En cours</span></td>
+                            <td>14/03/2024</td>
+                            <td>
+                                <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;">Traiter</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>#2024-003</strong></td>
+                            <td>Sophie Laurent</td>
+                            <td>Retard de remboursement</td>
+                            <td>Financière</td>
+                            <td><span style="color: #dc3545; font-weight: bold;">Urgente</span></td>
+                            <td><span class="status-badge status-resolved">Résolue</span></td>
+                            <td>13/03/2024</td>
+                            <td>
+                                <button class="btn" style="padding: 5px 10px; font-size: 0.8rem;">Voir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 15px; color: var(--medium-gray); font-size: 0.9rem;">
+                    Affichage de 1 à 10 sur 247 résultats
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>INFO UTILE</h3>
+                    <ul>
+                        <li>CITE LA TERRASE DOUALA YANSOKI</li>
+                        <li>+237 623 45 67 89</li>
+                        <li>RESERVATION@ZEDUCSPACE.COM</li>
+                        <li>OUVERT DU LUNDI AU DIMANCHE 15H - 21H</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>CONTACT</h3>
+                    <ul>
+                        <li><a href="instagramcom">Instagram</a></li>
+                        <li><a href="Whatsapp.com">Whatsapp</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>MOYENS DE PAIEMENT</h3>
+                    <ul>
+                        <li>Carte bancaire</li>
+                        <li>Espèces</li>
+                        <li>Mobile Money</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 RESTAURANT ZEDUC – TOUS DROITS RÉSERVÉS
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

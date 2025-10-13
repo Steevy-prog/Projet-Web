@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Promotions - Zeduc Space</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">RestauAdmin</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard-admin.html">Dashboard</a></li>
+                    <li><a href="gestion-workers.html">Employés</a></li>
+                    <li><a href="gestion-menu.html">Gestion Menu</a></li>
+                    <li><a href="gestion-promo.html" class="active">Promotions</a></li>
+                    <li><a href="admin-reclamation.html">Réclamations</a></li>
+                    <li><a href="setting.html">Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="admin-info">
+                <span>Administrateur</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Promotions Content -->
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Gestion des Promotions</h1>
+                <p>Créez et gérez vos offres spéciales et événements</p>
+            </div>
+
+            <!-- Search and Stats -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <div class="form-group">
+                    <input type="text" placeholder="Rechercher..." style="width: 100%;">
+                </div>
+                <div>
+                    <button class="btn" style="width: 100%;">Créer une Promotion</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>24</h3>
+                    <p>Promotions Actives</p>
+                    <span class="stat-change">+12%</span>
+                </div>
+                <div class="stat-card">
+                    <h3>1,247</h3>
+                    <p>Vues Totales</p>
+                    <span class="stat-change">+8%</span>
+                </div>
+                <div class="stat-card">
+                    <h3>€15,680</h3>
+                    <p>Revenus Générés</p>
+                    <span class="stat-change">+23%</span>
+                </div>
+                <div class="stat-card">
+                    <h3>892</h3>
+                    <p>Participants</p>
+                    <span class="stat-change">+15%</span>
+                </div>
+            </div>
+
+            <!-- Promotion Cards -->
+            <div class="promotion-grid">
+                <div class="promotion-card">
+                    <h3>Weekend Royal Bonus</h3>
+                    <p>Double vos gains ce weekend avec notre bonus exclusif</p>
+                    <div style="background: var(--old-gold); color: var(--primary-black); padding: 5px 10px; border-radius: 15px; display: inline-block; font-weight: bold; margin: 10px 0;">
+                        50% Bonus
+                    </div>
+                    <div class="promotion-stats">
+                        <div>
+                            <strong>1,234 vues</strong>
+                            <p>Expire: 2 jours</p>
+                        </div>
+                        <div>
+                            <strong>89 participants</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="promotion-card">
+                    <h3>Tournoi Poker VIP</h3>
+                    <p>Grand tournoi mensuel avec prix exceptionnels</p>
+                    <div style="background: var(--old-gold); color: var(--primary-black); padding: 5px 10px; border-radius: 15px; display: inline-block; font-weight: bold; margin: 10px 0;">
+                        €10,000 Prize Pool
+                    </div>
+                    <div class="promotion-stats">
+                        <div>
+                            <strong>892 vues</strong>
+                            <p>Début: 5 jours</p>
+                        </div>
+                        <div>
+                            <strong>156 inscrits</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="promotion-card">
+                    <h3>Programme Fidélité VIP</h3>
+                    <p>Récompenses exclusives pour nos joueurs fidèles</p>
+                    <div style="background: var(--old-gold); color: var(--primary-black); padding: 5px 10px; border-radius: 15px; display: inline-block; font-weight: bold; margin: 10px 0;">
+                        Cashback 15%
+                    </div>
+                    <div class="promotion-stats">
+                        <div>
+                            <strong>2156 vues</strong>
+                            <p>Permanent</p>
+                        </div>
+                        <div>
+                            <strong>345 membres</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="promotion-card">
+                    <h3>Bonus de Bienvenue</h3>
+                    <p>Offre spéciale pour les nouveaux joueurs</p>
+                    <div style="background: var(--medium-gray); color: white; padding: 5px 10px; border-radius: 15px; display: inline-block; font-weight: bold; margin: 10px 0;">
+                        200% Match
+                    </div>
+                    <div class="promotion-stats">
+                        <div>
+                            <strong>0 vues</strong>
+                            <p>En attente</p>
+                        </div>
+                        <div>
+                            <strong>0 participants</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="promotion-card">
+                    <h3>Spécial Halloween</h3>
+                    <p>Promotion saisonnière avec bonus effrayants</p>
+                    <div style="background: #6c757d; color: white; padding: 5px 10px; border-radius: 15px; display: inline-block; font-weight: bold; margin: 10px 0;">
+                        300% Bonus
+                    </div>
+                    <div class="promotion-stats">
+                        <div>
+                            <strong>3,456 vues</strong>
+                            <p>Terminé</p>
+                        </div>
+                        <div>
+                            <strong>567 participants</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create New Promotion Card -->
+                <div class="promotion-card" style="background: var(--light-gray); border: 2px dashed var(--medium-gray); text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h3 style="color: var(--medium-gray);">Créer une Promotion</h3>
+                    <p style="color: var(--medium-gray); margin: 10px 0;">Ajoutez une nouvelle offre ou événement</p>
+                    <button class="btn" style="margin-top: 15px;">+ Nouvelle Promotion</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>INFO UTILE</h3>
+                    <ul>
+                        <li>CITE LA TERRASE DOUALA YANSOKI</li>
+                        <li>+237 623 45 67 89</li>
+                        <li>RESERVATION@ZEDUCSPACE.COM</li>
+                        <li>OUVERT DU LUNDI AU DIMANCHE 15H - 21H</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>CONTACT</h3>
+                    <ul>
+                        <li><a href="instagramcom">Instagram</a></li>
+                        <li><a href="Whatsapp.com">Whatsapp</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>MOYENS DE PAIEMENT</h3>
+                    <ul>
+                        <li>Carte bancaire</li>
+                        <li>Espèces</li>
+                        <li>Mobile Money</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 RESTAURANT ZEDUC – TOUS DROITS RÉSERVÉS
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

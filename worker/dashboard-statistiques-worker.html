@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques - Zeduc Space Worker</title>
+    <link rel="stylesheet" href="worker-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">RestauDash</div>
+            <nav>
+                <ul>
+                    <li><a href="index-worker.html">Accueil</a></li>
+                    <li><a href="dashboard-miam-worker.html">Commandes</a></li>
+                    <li><a href="dashboard-statistiques-worker.html" class="active">Statistiques</a></li>
+                    <li><a href="dashboard-reclamation-worker.html">Réclamations</a></li>
+                </ul>
+            </nav>
+            <div class="worker-info">
+                <div class="worker-avatar">W</div>
+                <span>Worker</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Statistics Content -->
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Statistiques de Vente</h1>
+                <p>Consultez les performances hebdomadaires et ajustez votre flux de travail en temps réel.</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h3 style="color: var(--primary-dark); margin-bottom: 5px;">Semaine actuelle</h3>
+                    <p style="color: var(--medium-gray);">12-18 Oct 2024</p>
+                </div>
+                <button class="btn">Exporter les données</button>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Weekly Stats -->
+                    <div class="card">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                            <div style="text-align: center;">
+                                <h3 style="font-size: 2rem; color: var(--primary-dark); margin-bottom: 5px;">57</h3>
+                                <p style="color: var(--medium-gray); margin-bottom: 5px;">Nombre</p>
+                                <span class="stat-change positive">+8.2%</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <h3 style="font-size: 2rem; color: var(--primary-dark); margin-bottom: 5px;">122</h3>
+                                <p style="color: var(--medium-gray); margin-bottom: 5px;">Commandes</p>
+                                <span class="stat-change negative">-21%</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <h3 style="font-size: 2rem; color: var(--primary-dark); margin-bottom: 5px;">3.8%</h3>
+                                <p style="color: var(--medium-gray); margin-bottom: 5px;">Taux de Conversion</p>
+                                <span class="stat-change positive">+5.7%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Sales Chart -->
+                    <div class="card">
+                        <h2>Ventes Hebdomadaires</h2>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: var(--primary-dark);">€3,832</h3>
+                            <span class="stat-change positive">+12.5%</span>
+                        </div>
+                        
+                        <!-- Simple bar chart -->
+                        <div style="height: 200px; background: #f8f9fa; border-radius: 8px; padding: 20px; position: relative;">
+                            <div style="display: flex; align-items: end; justify-content: space-between; height: 140px;">
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 40px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Lun</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 60px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Mar</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 80px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Mer</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 100px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Jeu</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 120px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Ven</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 90px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Sam</div>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="height: 70px; background: #ffd700; margin: 0 5px;"></div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem;">Dim</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Total Sales -->
+                    <div class="card">
+                        <h2>Ventes Totales</h2>
+                        <div style="text-align: center; padding: 20px 0;">
+                            <div style="font-size: 3rem; color: var(--primary-dark); font-weight: bold; margin-bottom: 10px;">73</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.5rem; color: #ffd700;">300</div>
+                                    <div style="font-size: 0.8rem; color: var(--medium-gray);">Objectif</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.5rem; color: var(--accent-green);">290</div>
+                                    <div style="font-size: 0.8rem; color: var(--medium-gray);">Réalisé</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Statistics -->
+                    <div class="card">
+                        <h2>Statistiques Hebdomadaires</h2>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Lun</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€540</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Mar</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€620</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Mer</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€580</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Jeu</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€710</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Ven</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€820</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <span>Sam</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€690</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                                <span>Dim</span>
+                                <span style="color: var(--accent-green); font-weight: bold;">€560</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>INFO UTILE</h3>
+                    <ul>
+                        <li>CITE LA TERRASE DOUALA YANSOKI</li>
+                        <li>+237 623 45 67 89</li>
+                        <li>RESERVATION@ZEDUCSPACE.COM</li>
+                        <li>OUVERT DU LUNDI AU DIMANCHE 15H - 21H</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>CONTACT</h3>
+                    <ul>
+                        <li><a href="index-worker.html">Accueil</a></li>
+                        <li><a href="dashboard-miam-worker.html">Commandes</a></li>
+                        <li><a href="dashboard-statistiques-worker.html">Statistiques</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>MOYENS DE PAIEMENT</h3>
+                    <ul>
+                        <li>Carte bancaire</li>
+                        <li>Espèces</li>
+                        <li>Mobile Money</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 RESTAURANT ZEDUC – TOUS DROITS RÉSERVÉS
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

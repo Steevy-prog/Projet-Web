@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à Jour Menu - Zeduc Space Worker</title>
+    <link rel="stylesheet" href="worker-style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">RestauDash</div>
+            <nav>
+                <ul>
+                    <li><a href="index-worker.html">Accueil</a></li>
+                    <li><a href="dashboard-miam-worker.html">Commandes</a></li>
+                    <li><a href="dashboard-statistiques-worker.html">Statistiques</a></li>
+                    <li><a href="dashboard-reclamation-worker.html">Réclamations</a></li>
+                </ul>
+            </nav>
+            <div class="worker-info">
+                <div class="worker-avatar">W</div>
+                <span>Worker</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Update Content -->
+    <section class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Mise à Jour du Menu</h1>
+                <p>Créez les modifications temporaires du menu en temps réel</p>
+            </div>
+
+            <!-- Available Dishes -->
+            <div class="card">
+                <h2>Plats Disponibles</h2>
+                
+                <!-- Dish 1 -->
+                <div class="menu-item">
+                    <h3>Saumon Grillé aux Herbes</h3>
+                    <p>Filet de saumon frais grillé avec herbes de Provence et légumes de saison</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <div>
+                            <span class="menu-price">28.50€</span>
+                            <span style="margin-left: 15px; color: var(--medium-gray);">Plat principal</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="status-badge status-available">Disponible</span>
+                            <span style="color: var(--medium-gray);">Stock: 12</span>
+                            <button class="btn" style="padding: 8px 15px;">Modifier</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 2 -->
+                <div class="menu-item">
+                    <h3>Pizza Margherita</h3>
+                    <p>Pizza traditionnelle avec sauce tomate, mozzarella et basilic frais</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <div>
+                            <span class="menu-price">16.00€</span>
+                            <span style="margin-left: 15px; color: var(--medium-gray);">Plat principal</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="status-badge status-out-of-stock">Épuisé</span>
+                            <span style="color: var(--medium-gray); font-size: 0.9rem;">Modifié il y a 15 min</span>
+                            <button class="btn" style="padding: 8px 15px;">Réapprovisionner</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 3 -->
+                <div class="menu-item">
+                    <h3>Tiramisu Maison</h3>
+                    <p>Dessert italien traditionnel au café et mascarpone</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <div>
+                            <span class="menu-price">8.50€</span>
+                            <span style="margin-left: 15px; color: var(--medium-gray);">Dessert</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="status-badge status-low-stock">Stock Bas</span>
+                            <span style="color: var(--medium-gray);">Stock: 3</span>
+                            <button class="btn" style="padding: 8px 15px;">Commander</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 4 -->
+                <div class="menu-item">
+                    <h3>Stir-fry de Bœuf</h3>
+                    <p>Bœuf mariné sauté avec légumes croquants et sauce soja</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <div>
+                            <span class="menu-price">22.00€</span>
+                            <span style="margin-left: 15px; color: var(--medium-gray);">Plat principal</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="status-badge status-out-of-stock">Épuisé</span>
+                            <button class="btn" style="padding: 8px 15px;">Réapprovisionner</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Update Form -->
+            <div class="card">
+                <h2>Mise à Jour Rapide</h2>
+                <form style="margin-top: 20px;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="dish-select">Plat</label>
+                            <select id="dish-select" name="dish-select">
+                                <option value="">Sélectionnez un plat</option>
+                                <option value="saumon">Saumon Grillé aux Herbes</option>
+                                <option value="pizza">Pizza Margherita</option>
+                                <option value="tiramisu">Tiramisu Maison</option>
+                                <option value="boeuf">Stir-fry de Bœuf</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock</label>
+                            <input type="number" id="stock" name="stock" min="0" placeholder="Quantité">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Statut</label>
+                            <select id="status" name="status">
+                                <option value="available">Disponible</option>
+                                <option value="low-stock">Stock Bas</option>
+                                <option value="out-of-stock">Épuisé</option>
+                            </select>
+                        </div>
+                        <div style="align-self: end;">
+                            <button type="submit" class="btn" style="width: 100%;">Mettre à jour</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>INFO UTILE</h3>
+                    <ul>
+                        <li>CITE LA TERRASE DOUALA YANSOKI</li>
+                        <li>+237 623 45 67 89</li>
+                        <li>RESERVATION@ZEDUCSPACE.COM</li>
+                        <li>OUVERT DU LUNDI AU DIMANCHE 15H - 21H</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>CONTACT</h3>
+                    <ul>
+                        <li><a href="index-worker.html">Accueil</a></li>
+                        <li><a href="dashboard-miam-worker.html">Commandes</a></li>
+                        <li><a href="dashboard-update-worker.html">Menu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>MOYENS DE PAIEMENT</h3>
+                    <ul>
+                        <li>Carte bancaire</li>
+                        <li>Espèces</li>
+                        <li>Mobile Money</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2024 RESTAURANT ZEDUC – TOUS DROITS RÉSERVÉS
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

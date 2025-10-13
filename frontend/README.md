@@ -1,36 +1,46 @@
-# React + TypeScript + Vite
+# 🍽️ Zeduc Space - Restaurant Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Une application web moderne de gestion de restaurant construite avec React, TypeScript, Tailwind CSS et Framer Motion, offrant une expérience utilisateur exceptionnelle avec des animations 3D et des effets visuels avancés.
 
-Currently, two official plugins are available:
+## ✨ Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🏠 Pages Principales
+- **Page d'accueil** - Hero section avec animations 3D et présentation des spécialités
+- **Menu interactif** - Catalogue des plats avec recherche et filtres
+- **Système d'authentification** - Connexion/inscription sécurisée
 
-## React Compiler
+### 👤 Espace Utilisateur
+- **Dashboard personnalisé** - Statistiques et progression
+- **Centre de jeux** - Mini-jeux pour gagner des points de fidélité
+- **Système de fidélité** - Points et récompenses
+- **Commandes en ligne** - Interface intuitive de commande
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 👨‍💼 Espace Administrateur
+- **Dashboard admin** - Vue d'ensemble des performances
+- **Gestion du menu** - CRUD des plats et catégories
+- **Gestion des utilisateurs** - Administration des comptes
+- **Rapports et statistiques** - Analytics détaillées
 
-## Expanding the ESLint configuration
+## 🚀 Technologies Utilisées
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React 19 + TypeScript
+- **Styling**: Tailwind CSS avec configuration personnalisée
+- **Animations**: Framer Motion pour les effets 3D et transitions
+- **Routing**: React Router DOM
+- **Icons**: Lucide React
+- **Build Tool**: Vite
+- **3D Effects**: Three.js + React Three Fiber
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🎨 Design Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Animations 3D avancées** avec Framer Motion
+- **Effets de parallaxe** sur les cartes interactives
+- **Éléments flottants** en arrière-plan
+- **Dégradés dynamiques** et effets de glow
+- **Interface responsive** adaptée à tous les écrans
+- **Thème sombre** avec accents dorés
 
-      // Other configs...
+## 📦 Installation
     ],
     languageOptions: {
       parserOptions: {
