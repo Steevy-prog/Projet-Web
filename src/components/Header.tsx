@@ -56,7 +56,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           <div className="size-10 rounded-2xl bg-primary flex items-center justify-center">
             <Utensils className="size-6 text-primary-foreground" />
           </div>
-          <span className="text-primary">Restaurant Élégance</span>
+          <span className="text-primary">Restaurant Zeduc Space</span>
         </motion.div>
 
         <div className="flex items-center gap-4">

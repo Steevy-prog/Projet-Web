@@ -1,8 +1,12 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Utensils, Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import { Utensils, Facebook, Instagram, Twitter, Mail, Phone, MapPin, Briefcase } from 'lucide-react';
 
-export function Footer() {
+interface FooterProps {
+  onNavigate?: (page: string) => void;
+}
+
+export function Footer({ onNavigate }: FooterProps = {}) {
   const socialLinks = [
     { icon: Facebook, label: 'Facebook', href: '#' },
     { icon: Instagram, label: 'Instagram', href: '#' },
@@ -25,7 +29,7 @@ export function Footer() {
               <div className="size-10 rounded-2xl bg-primary flex items-center justify-center">
                 <Utensils className="size-6 text-primary-foreground" />
               </div>
-              <span className="text-primary">Restaurant Élégance</span>
+              <span className="text-primary">Restaurant Zeduc-Space</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               L'excellence culinaire à portée de main. Découvrez notre programme de fidélité et nos récompenses exclusives.
@@ -77,7 +81,7 @@ export function Footer() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Adresse</p>
-              <p className="text-sm text-foreground">123 Rue de la Gastronomie, Paris</p>
+              <p className="text-sm text-foreground">Cite la Terrasse, Yansoki, Douala</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -86,7 +90,7 @@ export function Footer() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Téléphone</p>
-              <p className="text-sm text-foreground">+33 1 23 45 67 89</p>
+              <p className="text-sm text-foreground">+237 6 23 45 67 89</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -95,16 +99,27 @@ export function Footer() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Email</p>
-              <p className="text-sm text-foreground">contact@restaurant-elegance.fr</p>
+              <p className="text-sm text-foreground">contact@zeduc-space.cm</p>
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="pt-6 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Restaurant Élégance. Tous droits réservés.
-          </p>
+        <div className="pt-6 border-t border-border">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Restaurant Zedcu-Space. Tous droits réservés.
+            </p>
+            {onNavigate && (
+              <button
+                onClick={() => onNavigate('employee-login')}
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Briefcase className="size-4" />
+                Espace Employé
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </footer>

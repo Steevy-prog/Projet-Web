@@ -68,3 +68,45 @@ export interface LeaderboardEntry {
   rank: number;
   gamesPlayed: number;
 }
+
+export interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'gerant' | 'employe' | 'etudiant';
+}
+
+export interface OrderWithDetails extends Order {
+  userName: string;
+  userEmail: string;
+}
+
+export interface Promotion {
+  id: string;
+  title: string;
+  description: string;
+  discount: number;
+  startDate: Date;
+  endDate: Date;
+  image: string;
+  active: boolean;
+  type: 'percentage' | 'fixed' | 'bogo';
+}
+
+export interface AppSettings {
+  restaurantName: string;
+  openingHours: {
+    [key: string]: { open: string; close: string; closed: boolean };
+  };
+  policies: {
+    refundPolicy: string;
+    privacyPolicy: string;
+    termsOfService: string;
+  };
+  contactInfo: {
+    email: string;
+    phone: string;
+    address: string;
+  };
+}
