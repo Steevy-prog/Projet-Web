@@ -5,6 +5,7 @@ import { useApp } from '../lib/context';
 import { Button } from '../components/ui/button';
 import { menuItems } from '../lib/data';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 interface UserHomeProps {
   onNavigate: (page: string) => void;
@@ -165,7 +166,7 @@ export function UserHome({ onNavigate }: UserHomeProps) {
                 <div className="p-5">
                   <h3 className="mb-2 text-foreground">{item.name}</h3>
                   <div className="flex items-center justify-between">
-                    <span className="text-primary">{item.price.toFixed(2)}€</span>
+                    <span className="text-primary">{formatPriceFromEur(item.price)}</span>
                     <ChevronRight className="size-5 text-primary group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>

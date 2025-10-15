@@ -4,6 +4,7 @@ import { UtensilsCrossed, Star, AlertCircle, CheckCircle, Eye, EyeOff } from 'lu
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 export function EmployeeMenu() {
   const { menuItems, toggleMenuItemAvailability, setDishOfDay } = useEmployee();
@@ -146,7 +147,7 @@ export function EmployeeMenu() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-lg text-foreground">{item.name}</h3>
-                  <span className="text-primary">{item.price.toFixed(2)}€</span>
+                  <span className="text-primary">{formatPriceFromEur(item.price)}</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
                 <span className="inline-block px-2 py-1 rounded-lg bg-secondary text-xs text-muted-foreground mb-4">

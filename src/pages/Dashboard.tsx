@@ -55,7 +55,7 @@ export function Dashboard() {
           className="mb-12"
         >
           <h1 className="text-4xl mb-2 text-foreground">
-            Mon <span className="text-primary">Dashboard</span>
+            Mon <span className="text-gold-shine animate-gold-glow">Dashboard</span>
           </h1>
           <p className="text-muted-foreground">
             Suivez vos performances et vos récompenses
@@ -82,15 +82,15 @@ export function Dashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-card border border-border rounded-2xl p-8"
+            className="bg-card border border-border rounded-2xl p-8 card-animated hover-gold-lift bg-gold-gradient"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 rounded-2xl bg-primary/10">
-                <TrendingUp className="size-6 text-primary" />
+              <div className="p-3 rounded-2xl bg-primary/10 animate-gold-pulse">
+                <TrendingUp className="size-6 text-primary animate-gold-sparkle" />
               </div>
               <div>
-                <h3 className="text-foreground">Prochaine Récompense</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="text-foreground hover-gold-brighten">Prochaine Récompense</h3>
+                <p className="text-sm text-primary">
                   {nextRewardPoints - currentPoints} points restants
                 </p>
               </div>
@@ -99,7 +99,7 @@ export function Dashboard() {
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Progression</span>
-                <span className="text-primary">
+                <span className="text-primary hover-gold-brighten">
                   {currentPoints} / {nextRewardPoints} pts
                 </span>
               </div>
@@ -115,9 +115,9 @@ export function Dashboard() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-card border border-border rounded-2xl p-8"
+            className="bg-card border border-border rounded-2xl p-8 card-animated hover-gold-lift"
           >
-            <h3 className="mb-6 text-foreground">Activités Récentes</h3>
+            <h3 className="mb-6 text-foreground text-gold-gradient">Activités Récentes</h3>
             <div className="space-y-4">
               {recentActivities.map((activity, index) => (
                 <motion.div
@@ -125,13 +125,13 @@ export function Dashboard() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex items-start justify-between pb-4 border-b border-border last:border-0 last:pb-0"
+                  className="flex items-start justify-between pb-4 border-b border-border last:border-0 last:pb-0 hover-gold-glow"
                 >
                   <div>
-                    <p className="text-foreground mb-1">{activity.title}</p>
+                    <p className="text-foreground mb-1 hover-gold-brighten">{activity.title}</p>
                     <p className="text-sm text-muted-foreground">{activity.date}</p>
                   </div>
-                  <span className="text-primary">+{activity.points}</span>
+                  <span className="text-primary hover-gold-brighten">+{activity.points}</span>
                 </motion.div>
               ))}
             </div>
@@ -146,7 +146,7 @@ export function Dashboard() {
           className="mt-12"
         >
           <h2 className="text-2xl mb-6 text-foreground">
-            <span className="text-primary">Succès</span> Débloqués
+            <span className="text-gold-shine">Succès</span> Débloqués
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -159,10 +159,10 @@ export function Dashboard() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 + index * 0.1 }}
-                className="bg-card border border-primary/30 rounded-2xl p-6 text-center"
+                className="bg-card border border-primary/30 rounded-2xl p-6 text-center card-animated hover-gold-lift border-gold-gradient"
               >
-                <div className="text-4xl mb-3">{achievement.icon}</div>
-                <h4 className="mb-2 text-foreground">{achievement.title}</h4>
+                <div className="text-4xl mb-3 animate-gold-sparkle">{achievement.icon}</div>
+                <h4 className="mb-2 text-foreground text-gold-gradient">{achievement.title}</h4>
                 <p className="text-sm text-muted-foreground">{achievement.desc}</p>
               </motion.div>
             ))}

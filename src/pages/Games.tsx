@@ -88,12 +88,12 @@ export function Games() {
               {
                 title: 'Double Points Weekend',
                 description: 'Gagnez 2x plus de points sur tous les jeux ce weekend',
-                date: '15-17 Oct 2025',
+                date: '25-27 Oct 2025',
                 status: 'Bientôt',
               },
               {
                 title: 'Tournoi Mensuel',
-                description: 'Affrontez les meilleurs joueurs et remportez des prix exclusifs',
+                description: 'Affrontez les meilleurs mangeur et remportez des prix exclusifs',
                 date: '20 Oct 2025',
                 status: 'Inscription ouverte',
               },

@@ -4,6 +4,7 @@ import { Users, ShoppingBag, TrendingUp, MessageSquare, DollarSign, Award, Utens
 import { useEmployee } from '../lib/employeeContext';
 import { StatCard } from '../components/StatCard';
 import { Button } from '../components/ui/button';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 interface AdminDashboardProps {
   onNavigate: (page: string) => void;
@@ -27,7 +28,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     {
       icon: DollarSign,
       label: 'Chiffre d\'affaires',
-      value: `${totalRevenue.toFixed(2)}€`,
+      value: formatPriceFromEur(totalRevenue),
       trend: 'Total',
     },
     {
@@ -231,7 +232,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   </div>
                   <p className="text-sm text-muted-foreground">{order.userName}</p>
                   <p className="text-sm text-muted-foreground">
-                    {order.items.length} article{order.items.length > 1 ? 's' : ''} • {order.total.toFixed(2)}€
+                    {order.items.length} article{order.items.length > 1 ? 's' : ''} • {formatPriceFromEur(order.total)}
                   </p>
                 </div>
                 <div className="text-right">

@@ -4,6 +4,7 @@ import { ChevronRight, Utensils, Award, Sparkles } from 'lucide-react';
 import { menuItems } from '../lib/data';
 import { Button } from '../components/ui/button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 interface HomeProps {
   onNavigate: (page: string) => void;
@@ -33,14 +34,14 @@ export function Home({ onNavigate }: HomeProps) {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: 'spring' }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-sm mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-sm mb-6 animate-gold-pulse"
           >
-            <Sparkles className="size-4 text-primary" />
+            <Sparkles className="size-4 text-primary animate-gold-sparkle" />
             <span className="text-sm text-primary">Programme de fidélité exclusif</span>
           </motion.div>
 
           <h1 className="text-5xl md:text-6xl mb-6 text-foreground">
-            L'Excellence Culinaire <span className="text-primary">à Portée de Main</span>
+            L'Excellence Culinaire <span className="text-gold-gradient animate-gold-glow">à Portée de Main</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Découvrez une expérience gastronomique unique alliant saveurs authentiques et innovation
@@ -50,7 +51,7 @@ export function Home({ onNavigate }: HomeProps) {
             <Button
               onClick={() => onNavigate('menus')}
               size="lg"
-              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground hover-gold-scale animate-gold-shine"
             >
               Découvrir nos menus
               <ChevronRight className="ml-2 size-5" />
@@ -59,7 +60,7 @@ export function Home({ onNavigate }: HomeProps) {
               onClick={() => onNavigate('login')}
               size="lg"
               variant="outline"
-              className="rounded-full border-primary text-primary hover:bg-primary/10"
+              className="rounded-full border-primary text-primary hover:bg-primary/10 hover-gold-glow"
             >
               Rejoindre le programme
             </Button>
@@ -76,7 +77,7 @@ export function Home({ onNavigate }: HomeProps) {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl mb-4 text-foreground">Nos Plats <span className="text-primary">Populaires</span></h2>
+            <h2 className="text-4xl mb-4 text-foreground">Nos Plats <span className="text-gold-shine">Populaires</span></h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Découvrez nos créations les plus appréciées par nos clients
             </p>
@@ -91,7 +92,7 @@ export function Home({ onNavigate }: HomeProps) {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="bg-card border border-border rounded-2xl overflow-hidden group cursor-pointer"
+                className="bg-card border border-border rounded-2xl overflow-hidden group cursor-pointer card-animated hover-gold-lift"
                 onClick={() => onNavigate('menus')}
               >
                 <div className="relative h-64 overflow-hidden">
@@ -107,7 +108,7 @@ export function Home({ onNavigate }: HomeProps) {
                   </div>
                 </div>
                 <div className="p-5 flex items-center justify-between">
-                  <span className="text-primary text-xl">{item.price.toFixed(2)}€</span>
+                  <span className="text-primary text-xl hover-gold-brighten">{formatPriceFromEur(item.price)}</span>
                   <ChevronRight className="size-5 text-primary group-hover:translate-x-1 transition-transform" />
                 </div>
               </motion.div>
@@ -123,7 +124,7 @@ export function Home({ onNavigate }: HomeProps) {
             <Button
               onClick={() => onNavigate('menus')}
               size="lg"
-              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground hover-gold-scale"
             >
               Voir tous les menus
               <ChevronRight className="ml-2 size-5" />
@@ -161,12 +162,12 @@ export function Home({ onNavigate }: HomeProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="text-center p-8 rounded-2xl bg-card border border-border"
+                  className="text-center p-8 rounded-2xl bg-card border border-border hover-gold-lift card-animated"
                 >
-                  <div className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4">
+                  <div className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4 animate-gold-pulse">
                     <Icon className="size-8 text-primary" />
                   </div>
-                  <h3 className="mb-3 text-foreground">{feature.title}</h3>
+                  <h3 className="mb-3 text-foreground hover-gold-brighten">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </motion.div>
               );

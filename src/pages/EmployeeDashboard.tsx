@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ShoppingBag, Clock, CheckCircle, TrendingUp, AlertCircle, UtensilsCrossed, MessageSquare, BarChart3 } from 'lucide-react';
+import { ShoppingBag, Clock, CheckCircle, AlertCircle, Package, UtensilsCrossed, MessageSquare, BarChart3 } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
-import { StatCard } from '../components/StatCard';
 import { Button } from '../components/ui/button';
+import { StatCard } from '../components/StatCard';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 interface EmployeeDashboardProps {
   onNavigate: (page: string) => void;
@@ -205,7 +206,7 @@ export function EmployeeDashboard({ onNavigate }: EmployeeDashboardProps) {
                   </div>
                   <p className="text-sm text-muted-foreground">{order.userName}</p>
                   <p className="text-sm text-muted-foreground">
-                    {order.items.length} article{order.items.length > 1 ? 's' : ''} • {order.total.toFixed(2)}€
+                    {order.items.length} article{order.items.length > 1 ? 's' : ''} • {formatPriceFromEur(order.total)}
                   </p>
                 </div>
                 <div className="text-right">

@@ -5,6 +5,7 @@ import { useApp } from '../lib/context';
 import { Button } from '../components/ui/button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { toast } from 'sonner@2.0.3';
+import { formatPriceFromEur } from '../lib/formatPrice';
 
 interface CartProps {
   onNavigate: (page: string) => void;
@@ -127,7 +128,7 @@ export function Cart({ onNavigate }: CartProps) {
                     </div>
 
                     <span className="text-primary">
-                      {(item.menuItem.price * item.quantity).toFixed(2)}€
+                      {formatPriceFromEur(item.menuItem.price * item.quantity)}
                     </span>
                   </div>
                 </div>
@@ -148,7 +149,7 @@ export function Cart({ onNavigate }: CartProps) {
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Sous-total</span>
-                  <span className="text-foreground">{cartTotal.toFixed(2)}€</span>
+                  <span className="text-foreground">{formatPriceFromEur(cartTotal)}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Livraison</span>
@@ -157,7 +158,7 @@ export function Cart({ onNavigate }: CartProps) {
                 <div className="pt-3 border-t border-border">
                   <div className="flex items-center justify-between">
                     <span className="text-foreground">Total</span>
-                    <span className="text-2xl text-primary">{cartTotal.toFixed(2)}€</span>
+                    <span className="text-2xl text-primary">{formatPriceFromEur(cartTotal)}</span>
                   </div>
                 </div>
               </div>

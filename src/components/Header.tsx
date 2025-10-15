@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, ShoppingCart, User, LogOut, Home, Utensils, MessageSquare, Trophy, Gift, Gamepad2, BarChart3 } from 'lucide-react';
+import logo from './assets/logo.svg';
 import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../lib/context';
 import { Button } from './ui/button';
@@ -50,13 +51,13 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-3 cursor-pointer hover-gold-lift"
           onClick={() => handleNavigation(user ? 'user-home' : 'home')}
         >
-          <div className="size-10 rounded-2xl bg-primary flex items-center justify-center">
-            <Utensils className="size-6 text-primary-foreground" />
+          <div className="size-12 rounded-2xl overflow-hidden animate-gold-pulse">
+            <img src={logo} alt="Restaurant Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-primary">Restaurant Zeduc Space</span>
+          <span className="text-gold-shine">Restaurant Zeduc Space</span>
         </motion.div>
 
         <div className="flex items-center gap-4">
@@ -64,12 +65,12 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary border border-border"
+              className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary border border-border hover-gold-glow"
             >
-              <User className="size-5 text-primary" />
+              <User className="size-5 text-primary animate-gold-sparkle" />
               <div className="text-left">
-                <p className="text-sm">{user.name}</p>
-                <p className="text-xs text-muted-foreground">{user.loyaltyPoints} pts</p>
+                <p className="text-sm hover-gold-brighten">{user.name}</p>
+                <p className="text-xs text-primary">{user.loyaltyPoints} pts</p>
               </div>
             </motion.div>
           )}
@@ -79,10 +80,10 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleNavigation('cart')}
-              className="relative p-2 rounded-2xl bg-secondary hover:bg-primary/20 transition-colors"
+              className="relative p-2 rounded-2xl bg-secondary hover:bg-primary/20 transition-colors hover-gold-scale"
             >
               <ShoppingCart className="size-6 text-primary" />
-              <Badge className="absolute -top-1 -right-1 size-5 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground">
+              <Badge className="absolute -top-1 -right-1 size-5 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground animate-gold-pulse">
                 {cart.length}
               </Badge>
             </motion.button>

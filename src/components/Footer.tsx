@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import SocialButtons from './SocialButtons';
 import { Utensils, Facebook, Instagram, Twitter, Mail, Phone, MapPin, Briefcase } from 'lucide-react';
 
 interface FooterProps {
@@ -15,7 +16,7 @@ export function Footer({ onNavigate }: FooterProps = {}) {
 
   const footerLinks = {
     Restaurant: ['À propos', 'Nos chefs', 'Carrières', 'Actualités'],
-    Services: ['Commander', 'Livraison', 'Réservation', 'Traiteur'],
+    Services: ['Commander', 'Livraison', 'Panier', 'Traiteur'],
     Légal: ['Mentions légales', 'CGU', 'Confidentialité', 'Cookies'],
   };
 
@@ -35,21 +36,7 @@ export function Footer({ onNavigate }: FooterProps = {}) {
               L'excellence culinaire à portée de main. Découvrez notre programme de fidélité et nos récompenses exclusives.
             </p>
             <div className="flex gap-3">
-              {socialLinks.map((social, index) => {
-                const Icon = social.icon;
-                return (
-                  <motion.a
-                    key={index}
-                    href={social.href}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="size-10 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors"
-                    aria-label={social.label}
-                  >
-                    <Icon className="size-5 text-primary" />
-                  </motion.a>
-                );
-              })}
+            <SocialButtons />
             </div>
           </div>
 

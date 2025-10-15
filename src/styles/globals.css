@@ -8,37 +8,37 @@
   --card-foreground: #f5f5f5;
   --popover: #151518;
   --popover-foreground: #f5f5f5;
-  --primary: #b88b1f;
+  --primary: #d4a647;
   --primary-foreground: #0b0b0d;
   --secondary: #1a1a1d;
   --secondary-foreground: #f5f5f5;
   --muted: #1a1a1d;
   --muted-foreground: #a0a0a0;
-  --accent: #b88b1f;
+  --accent: #f4c563;
   --accent-foreground: #0b0b0d;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(184, 139, 31, 0.2);
-  --input: rgba(184, 139, 31, 0.3);
+  --border: rgba(212, 166, 71, 0.35);
+  --input: rgba(212, 166, 71, 0.45);
   --input-background: #1a1a1d;
   --switch-background: #2a2a2d;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: rgba(184, 139, 31, 0.5);
-  --chart-1: #b88b1f;
-  --chart-2: #d4a647;
-  --chart-3: #8b6914;
-  --chart-4: #e5c371;
-  --chart-5: #6b4f0f;
+  --ring: rgba(244, 197, 99, 0.65);
+  --chart-1: #d4a647;
+  --chart-2: #f4c563;
+  --chart-3: #b88b1f;
+  --chart-4: #ffd97d;
+  --chart-5: #8b6914;
   --radius: 1rem;
   --sidebar: #0b0b0d;
   --sidebar-foreground: #f5f5f5;
-  --sidebar-primary: #b88b1f;
+  --sidebar-primary: #d4a647;
   --sidebar-primary-foreground: #0b0b0d;
   --sidebar-accent: #1a1a1d;
   --sidebar-accent-foreground: #f5f5f5;
-  --sidebar-border: rgba(184, 139, 31, 0.2);
-  --sidebar-ring: rgba(184, 139, 31, 0.5);
+  --sidebar-border: rgba(212, 166, 71, 0.35);
+  --sidebar-ring: rgba(244, 197, 99, 0.65);
 }
 
 .dark {
@@ -191,4 +191,280 @@ html {
 
 body {
   overflow-x: hidden;
+}
+
+/* ===== ANIMATIONS DORÉES ===== */
+
+/* Animation de pulsation dorée */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(212, 166, 71, 0.3), 0 0 20px rgba(212, 166, 71, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(244, 197, 99, 0.5), 0 0 30px rgba(244, 197, 99, 0.3);
+  }
+}
+
+/* Animation de brillance */
+@keyframes goldShine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Animation de scintillement */
+@keyframes goldSparkle {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.85;
+    filter: brightness(1.2);
+  }
+}
+
+/* Animation de glow */
+@keyframes goldGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(212, 166, 71, 0.5), 0 0 20px rgba(212, 166, 71, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(244, 197, 99, 0.7), 0 0 30px rgba(244, 197, 99, 0.5), 0 0 40px rgba(255, 217, 125, 0.3);
+  }
+}
+
+/* Animation de fade-in avec scale */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation de slide-up */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation de border glow */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: rgba(212, 166, 71, 0.35);
+  }
+  50% {
+    border-color: rgba(244, 197, 99, 0.65);
+  }
+}
+
+/* ===== CLASSES UTILITAIRES D'ANIMATION ===== */
+
+.animate-gold-pulse {
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+.animate-gold-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-gold-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(244, 197, 99, 0.3) 50%,
+    transparent 100%
+  );
+  animation: goldShine 3s ease-in-out infinite;
+}
+
+.animate-gold-sparkle {
+  animation: goldSparkle 2s ease-in-out infinite;
+}
+
+.animate-gold-glow {
+  animation: goldGlow 2s ease-in-out infinite;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Délais d'animation pour effets en cascade */
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* ===== EFFETS HOVER DORÉS ===== */
+
+.hover-gold-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-gold-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(212, 166, 71, 0.3), 0 6px 12px rgba(212, 166, 71, 0.2);
+}
+
+.hover-gold-scale {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-gold-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(244, 197, 99, 0.4);
+}
+
+.hover-gold-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-gold-glow:hover {
+  box-shadow: 0 0 15px rgba(212, 166, 71, 0.5), 0 0 30px rgba(212, 166, 71, 0.3);
+  border-color: rgba(244, 197, 99, 0.7);
+}
+
+.hover-gold-brighten {
+  transition: all 0.3s ease;
+}
+
+.hover-gold-brighten:hover {
+  filter: brightness(1.2);
+  color: #ffd97d;
+}
+
+/* ===== EFFETS DE TEXTE DORÉ ===== */
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #d4a647 0%, #f4c563 50%, #ffd97d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gold-shine {
+  background: linear-gradient(
+    90deg,
+    #b88b1f 0%,
+    #d4a647 25%,
+    #f4c563 50%,
+    #d4a647 75%,
+    #b88b1f 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShine 3s linear infinite;
+}
+
+/* ===== EFFETS DE BORDURE DORÉE ===== */
+
+.border-gold-gradient {
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--card), var(--card)), 
+                    linear-gradient(135deg, #d4a647, #f4c563, #ffd97d);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* ===== EFFETS DE FOND DORÉ ===== */
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, rgba(212, 166, 71, 0.1) 0%, rgba(244, 197, 99, 0.05) 100%);
+}
+
+.bg-gold-radial {
+  background: radial-gradient(circle at center, rgba(244, 197, 99, 0.15) 0%, transparent 70%);
+}
+
+/* ===== ANIMATIONS POUR BOUTONS ===== */
+
+button, .btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover, .btn:hover {
+  transform: translateY(-2px);
+}
+
+button:active, .btn:active {
+  transform: translateY(0);
+}
+
+/* ===== ANIMATIONS POUR CARTES ===== */
+
+.card-animated {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-animated:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(212, 166, 71, 0.25), 0 8px 16px rgba(212, 166, 71, 0.15);
+}
+
+/* ===== EFFETS DE CHARGEMENT ===== */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(212, 166, 71, 0.1) 0%,
+    rgba(244, 197, 99, 0.2) 50%,
+    rgba(212, 166, 71, 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
 }
