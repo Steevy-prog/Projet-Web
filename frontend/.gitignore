@@ -1,0 +1,149 @@
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log
+# optionally ignorer les lockfiles si vous ne voulez pas les committer
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Build / output
+dist/
+build/
+out/
+public/build/
+.tmp/
+.temp/
+.cache/
+.vite/
+.parcel-cache/
+.next/
+.nuxt/
+.astro/
+
+# Environment
+.env
+.env.*.local
+.env.local
+.env.test
+.env.production
+
+# Logs / reports
+logs/
+*.log
+coverage/
+*.lcov
+coverage/
+
+# IDE / éditeur
+.vscode/
+.idea/
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+~*.tmp
+
+# Misc
+*.tgz
+*.zip
+*.tar.gz
+*.bak
+*.orig
+
+# Docker / Compose local overrides
+docker-compose.override.yml
+.env.docker
+
+# TypeScript
+*.tsbuildinfo
+
+# Python (si présent)
+__pycache__/
+*.py[cod]
+*.egg-info/# Node / JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log
+# optionally ignorer les lockfiles si vous ne voulez pas les committer
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Build / output
+dist/
+build/
+out/
+public/build/
+.tmp/
+.temp/
+.cache/
+.vite/
+.parcel-cache/
+.next/
+.nuxt/
+.astro/
+
+# Environment
+.env
+.env.*.local
+.env.local
+.env.test
+.env.production
+
+# Logs / reports
+logs/
+*.log
+coverage/
+*.lcov
+coverage/
+
+# IDE / éditeur
+.vscode/
+.idea/
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+~*.tmp
+
+# Misc
+*.tgz
+*.zip
+*.tar.gz
+*.bak
+*.orig
+
+# Docker / Compose local overrides
+docker-compose.override.yml
+.env.docker
+
+# TypeScript
+*.tsbuildinfo
+
+# Python (si présent)
+__pycache__/
+*.py[cod]
+*.egg-info/
