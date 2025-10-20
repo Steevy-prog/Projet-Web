@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AppProvider } from './lib/context';
 import { EmployeeProvider } from './lib/employeeContext';
-import { Header } from './components/Header';
-import { EmployeeHeader } from './components/EmployeeHeader';
-import { GerantHeader } from './components/GerantHeader';
-import { AdminHeader } from './components/AdminHeader';
-import { Footer } from './components/Footer';
+import { HeaderWrapper } from './components/HeaderWrapper';
+import { FooterWrapper } from './components/FooterWrapper';
 import { Home } from './pages/Home';
 import { Menus } from './pages/Menus';
 import { Reclamations } from './pages/Reclamations';
@@ -41,156 +39,92 @@ import { AdminReclamations } from './pages/AdminReclamations';
 import { AdminSettings } from './pages/AdminSettings';
 import { Toaster } from './components/ui/sonner';
 import { Referral } from './pages/Referral';
+import { CookieConsent } from './components/CookieConsent';
 
-
-type Page =
-  | 'home'
-  | 'menus'
-  | 'reclamations'
-  | 'login'
-  | 'forgot-password'
-  | 'user-home'
-  | 'dashboard'
-  | 'user-menus'
-  | 'user-messaging'
-  | 'user-reclamation'
-  | 'referral' 
-  | 'games'
-  | 'leaderboard'
-  | 'loyalty'
-  | 'cart'
-  | 'employee-login'
-  | 'employee-dashboard'
-  | 'employee-orders'
-  | 'employee-menu'
-  | 'employee-messaging'
-  | 'employee-reclamations'
-  | 'employee-stats'
-  | 'gerant-dashboard'
-  | 'gerant-orders'
-  | 'gerant-employees'
-  | 'gerant-reclamations'
-  | 'gerant-stats'
-  | 'admin-dashboard'
-  | 'admin-menu'
-  | 'admin-employees'
-  | 'admin-promotions'
-  | 'admin-stats'
-  | 'admin-reclamations'
-  | 'admin-settings';
+// Wrapper pour les pages avec navigation
+function WithNav({ component: Component }: { component: React.ComponentType<any> }) {
+  const navigate = useNavigate();
+  const handleNavigate = (page: string) => {
+    const route = page.startsWith('/') ? page : `/${page}`;
+    navigate(route);
+  };
+  return <Component onNavigate={handleNavigate} onClose={() => navigate(-1)} onForgotPassword={() => navigate('/forgot-password')} />;
+}
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const location = useLocation();
+  const pathname = location.pathname;
 
-  const isEmployeePage = currentPage.startsWith('employee-');
-  const isGerantPage = currentPage.startsWith('gerant-');
-  const isAdminPage = currentPage.startsWith('admin-');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <Home onNavigate={setCurrentPage} />;
-      case 'menus':
-        return <Menus />;
-      case 'reclamations':
-        return <Reclamations />;
-      case 'login':
-        return <Login onNavigate={setCurrentPage} />;
-      case 'forgot-password':
-        return <ForgotPassword onNavigate={setCurrentPage} />;
-      case 'user-home':
-        return <UserHome onNavigate={setCurrentPage} />;
-      case 'dashboard':
-        return <Dashboard />;
-      case 'user-menus':
-        return <UserMenus />;
-      case 'user-messaging':
-        return <UserMessaging  />;
-      case 'user-reclamation':
-        return <UserReclamation />;
-      case 'referral':
-        return <Referral />;
-      case 'games':
-        return <Games />;
-      case 'leaderboard':
-        return <Leaderboard />;
-      case 'loyalty':
-        return <Loyalty />;
-      case 'cart':
-        return <Cart onNavigate={setCurrentPage} />;
-      case 'employee-login':
-        return <EmployeeLogin onNavigate={setCurrentPage} />;
-      case 'employee-dashboard':
-        return <EmployeeDashboard onNavigate={setCurrentPage} />;
-      case 'employee-orders':
-        return <EmployeeOrders />;
-      case 'employee-menu':
-        return <EmployeeMenu />;
-      case 'employee-messaging':
-        return <EmployeeMessaging />;
-      case 'employee-reclamations':
-        return <EmployeeReclamations />;
-      case 'employee-stats':
-        return <EmployeeStats />;
-      case 'gerant-dashboard':
-        return <GerantDashboard onNavigate={setCurrentPage} />;
-      case 'gerant-orders':
-        return <GerantOrders />;
-      case 'gerant-employees':
-        return <GerantEmployees />;
-      case 'gerant-reclamations':
-        return <GerantReclamations />;
-      case 'gerant-stats':
-        return <GerantStats />;
-      case 'admin-dashboard':
-        return <AdminDashboard onNavigate={setCurrentPage} />;
-      case 'admin-menu':
-        return <AdminMenu />;
-      case 'admin-employees':
-        return <AdminEmployees />;
-      case 'admin-promotions':
-        return <AdminPromotions />;
-      case 'admin-stats':
-        return <AdminStats />;
-      case 'admin-reclamations':
-        return <AdminReclamations />;
-      case 'admin-settings':
-        return <AdminSettings />;
-      default:
-        return <Home onNavigate={setCurrentPage} />;
-    }
-  };
-
-  const renderHeader = () => {
-    if (isAdminPage) {
-      return <AdminHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else if (isGerantPage) {
-      return <GerantHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else if (isEmployeePage) {
-      return <EmployeeHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else {
-      return <Header currentPage={currentPage} onNavigate={setCurrentPage} />;
-    }
-  };
-
+  const isEmployeePage = pathname.startsWith('/employee');
+  const isGerantPage = pathname.startsWith('/gerant');
+  const isAdminPage = pathname.startsWith('/admin');
   const showFooter = !isEmployeePage && !isGerantPage && !isAdminPage;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {renderHeader()}
-      <main className="flex-1">{renderPage()}</main>
-      {showFooter && <Footer onNavigate={setCurrentPage} />}
+      <HeaderWrapper />
+      <main className="flex-1">
+        <Routes>
+          {/* Routes publiques */}
+          <Route path="/" element={<WithNav component={Home} />} />
+          <Route path="/menus" element={<Menus />} />
+          <Route path="/reclamations" element={<Reclamations />} />
+          <Route path="/login" element={<WithNav component={Login} />} />
+          <Route path="/forgot-password" element={<WithNav component={ForgotPassword} />} />
+          
+          {/* Routes utilisateur */}
+          <Route path="/user-home" element={<WithNav component={UserHome} />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/user-menus" element={<UserMenus />} />
+          <Route path="/user-messaging" element={<UserMessaging />} />
+          <Route path="/user-reclamation" element={<UserReclamation />} />
+          <Route path="/referral" element={<Referral />} />
+          <Route path="/games" element={<Games />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/loyalty" element={<Loyalty />} />
+          <Route path="/cart" element={<WithNav component={Cart} />} />
+          
+          {/* Routes employé */}
+          <Route path="/employee-login" element={<WithNav component={EmployeeLogin} />} />
+          <Route path="/employee-dashboard" element={<WithNav component={EmployeeDashboard} />} />
+          <Route path="/employee-orders" element={<EmployeeOrders />} />
+          <Route path="/employee-menu" element={<EmployeeMenu />} />
+          <Route path="/employee-messaging" element={<EmployeeMessaging />} />
+          <Route path="/employee-reclamations" element={<EmployeeReclamations />} />
+          <Route path="/employee-stats" element={<EmployeeStats />} />
+          
+          {/* Routes gérant */}
+          <Route path="/gerant-dashboard" element={<WithNav component={GerantDashboard} />} />
+          <Route path="/gerant-orders" element={<GerantOrders />} />
+          <Route path="/gerant-employees" element={<GerantEmployees />} />
+          <Route path="/gerant-reclamations" element={<GerantReclamations />} />
+          <Route path="/gerant-stats" element={<GerantStats />} />
+          
+          {/* Routes admin */}
+          <Route path="/admin-dashboard" element={<WithNav component={AdminDashboard} />} />
+          <Route path="/admin-menu" element={<AdminMenu />} />
+          <Route path="/admin-employees" element={<AdminEmployees />} />
+          <Route path="/admin-promotions" element={<AdminPromotions />} />
+          <Route path="/admin-stats" element={<AdminStats />} />
+          <Route path="/admin-reclamations" element={<AdminReclamations />} />
+          <Route path="/admin-settings" element={<AdminSettings />} />
+        </Routes>
+      </main>
+      {showFooter && <FooterWrapper />}
       <Toaster />
+      <CookieConsent />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <AppProvider>
-      <EmployeeProvider>
-        <AppContent />
-      </EmployeeProvider>
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <EmployeeProvider>
+          <AppContent />
+        </EmployeeProvider>
+      </AppProvider>
+    </BrowserRouter>
   );
 }
