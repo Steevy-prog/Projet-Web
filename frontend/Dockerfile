@@ -1,32 +1,18 @@
-# Stage 1: Build
-FROM node:20-alpine AS build
+FROM node:20-alpine
 
-# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers de dépendances
+# Copy package files
 COPY package*.json ./
 
-# Installer les dépendances
+# Install dependencies
 RUN npm ci --legacy-peer-deps
 
-# Copier le reste des fichiers du projet
+# Copy the rest of the application
 COPY . .
 
-# Build de l'application
-RUN npm run build
+# Expose Vite port
+EXPOSE 5173
 
-# Stage 2: Production
-FROM nginx:alpine AS production
-
-# Copier la configuration nginx personnalisée
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copier les fichiers build depuis le stage précédent
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Exposer le port 80
-EXPOSE 80
-
-# Démarrer nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Run Vite with host flag
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
