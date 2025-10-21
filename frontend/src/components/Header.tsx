@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Menu, X, ShoppingCart, User, LogOut, Home, Utensils, MessageSquare, Trophy, Gift, Gamepad2, BarChart3 } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, LogOut, Home, Utensils, MessageSquare, Trophy, Gift, Gamepad2, BarChart3, MessageCircle } from 'lucide-react';
 import logo from './assets/logo.svg';
 import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../lib/context';
+import { useMessaging } from '../lib/messagingContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
@@ -11,9 +12,17 @@ interface HeaderProps {
   onNavigate: (page: string) => void;
 }
 
+interface MenuItem {
+  icon: any;
+  label: string;
+  page: string;
+  badge?: number;
+}
+
 export function Header({ currentPage, onNavigate }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, setUser, cart } = useApp();
+  const { getUnreadCount } = useMessaging();
 
   const handleLogout = () => {
     setUser(null);
@@ -26,17 +35,20 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
     setIsMenuOpen(false);
   };
 
-  const publicMenuItems = [
+  const publicMenuItems: MenuItem[] = [
     { icon: Home, label: 'Accueil', page: 'home' },
     { icon: Utensils, label: 'Menus', page: 'menus' },
     { icon: MessageSquare, label: 'Réclamations', page: 'reclamations' },
   ];
 
-  const userMenuItems = [
+  const unreadMessagesCount = user ? getUnreadCount(user.id, 'user') : 0;
+
+  const userMenuItems: MenuItem[] = [
     { icon: Home, label: 'Accueil', page: 'user-home' },
     { icon: BarChart3, label: 'Dashboard', page: 'dashboard' },
     { icon: Utensils, label: 'Commander', page: 'user-menus' },
     { icon: ShoppingCart, label: 'Panier', page: 'cart' },
+    { icon: MessageCircle, label: 'Messagerie', page: 'user-messaging', badge: unreadMessagesCount },
     { icon: Gamepad2, label: 'Jeux', page: 'games' },
     { icon: Trophy, label: 'Classement', page: 'leaderboard' },
     { icon: Gift, label: 'Fidélité', page: 'loyalty' },
@@ -123,19 +135,40 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       onClick={() => handleNavigation(item.page)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors text-left ${
+                      className={`flex items-center justify-between px-4 py-3 rounded-2xl transition-colors text-left ${
                         isActive
                           ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-secondary'
                       }`}
                     >
-                      <Icon className="size-5" />
-                      <span>{item.label}</span>
+                      <div className="flex items-center gap-3">
+                        <Icon className="size-5" />
+                        <span>{item.label}</span>
+                      </div>
+                      {item.badge !== undefined && item.badge > 0 && (
+                        <Badge className="bg-destructive text-destructive-foreground">
+                          {item.badge}
+                        </Badge>
+                      )}
                     </motion.button>
                   );
                 })}
 
-                {user && (
+                {!user ? (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: menuItems.length * 0.05 }}
+                  >
+                    <Button
+                      onClick={() => handleNavigation('login')}
+                      className="w-full rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
+                      <User className="size-5 mr-2" />
+                      Connexion
+                    </Button>
+                  </motion.div>
+                ) : (
                   <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}

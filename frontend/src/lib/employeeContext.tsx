@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Employee, OrderWithDetails, Reclamation, MenuItem, Promotion, AppSettings } from './types';
+import { Employee, OrderWithDetails, Reclamation, Promotion, AppSettings } from './types';
 import { employees, mockOrders, mockReclamations, menuItemsStatus, MenuItemStatus, mockPromotions, appSettings } from './employeeData';
 
 interface EmployeeContextType {
@@ -35,19 +35,7 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = useState<OrderWithDetails[]>(mockOrders);
   const [reclamations, setReclamations] = useState<Reclamation[]>(mockReclamations);
   const [menuItems, setMenuItems] = useState<MenuItemStatus[]>(menuItemsStatus);
-  const [employeesList, setEmployeesList] = useState<Employee[]>(() => {
-    // Charger depuis localStorage ou utiliser les données mock initiales
-    const storedEmployees = localStorage.getItem('employees');
-    if (storedEmployees) {
-      try {
-        return JSON.parse(storedEmployees);
-      } catch (error) {
-        console.error('Failed to parse stored employees:', error);
-        localStorage.removeItem('employees');
-      }
-    }
-    return employees; // Fallback aux données mock
-  });
+  const [employeesList, setEmployeesList] = useState<Employee[]>(employees);
   const [promotions, setPromotions] = useState<Promotion[]>(mockPromotions);
   const [settings, setSettings] = useState<AppSettings>(appSettings);
 
@@ -64,13 +52,8 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Sauvegarder les employés dans localStorage quand ils changent
-  useEffect(() => {
-    localStorage.setItem('employees', JSON.stringify(employeesList));
-  }, [employeesList]);
-
   const login = (email: string, password: string): boolean => {
-    const foundEmployee = employeesList.find(
+    const foundEmployee = employees.find(
       (emp) => emp.email === email && emp.password === password
     );
 

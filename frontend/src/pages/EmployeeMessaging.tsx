@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
+import { useMessaging } from '../lib/messagingContext';
 import { useEmployee } from '../lib/employeeContext';
 import { ChatList } from '../components/messaging/ChatList';
 import { ChatWindow } from '../components/messaging/ChatWindow';
-import { useMessaging } from '../lib/useMessaging'; 
 
 /**
  * Page EmployeeMessaging - Interface de messagerie pour les employés

@@ -34,7 +34,6 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-<<<<<<< HEAD
     'google' => [
     'client_id' => env('GOOGLE_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
@@ -50,7 +49,4 @@ return [
     'client_secret' => env('INSTAGRAM_CLIENT_SECRET'),
     'redirect' => env('INSTAGRAM_REDIRECT_URI'),
     ],
-=======
-
->>>>>>> parent of a5a5a5d8 (...Feat OAuth 2.0 for google ig and facebook auth)
 ];

@@ -7,7 +7,6 @@ import { useApp } from '../lib/context';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner@2.0.3';
-import { Footer } from '../components/Footer'; // Chemin corrigé
 
 export function UserMenus() {
   const { addToCart } = useApp();
@@ -108,12 +107,6 @@ export function UserMenus() {
           </motion.div>
         )}
       </div>
-
-      {/* Footer avec masquage du lien Espace Employé */}
-      <div className="footer-no-employee">
-        <Footer />
-      </div>
-      
     </div>
   );
 }

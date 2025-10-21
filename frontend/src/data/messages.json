@@ -1,0 +1,146 @@
+{
+  "conversations": [
+    {
+      "id": "conv1",
+      "userId": "u1",
+      "userName": "Sophie Martin",
+      "employeeId": "emp2",
+      "employeeName": "Marie Gérant",
+      "lastMessage": "Merci pour votre réponse rapide !",
+      "lastMessageTime": "2024-10-15T14:30:00Z",
+      "unreadCount": 0
+    },
+    {
+      "id": "conv2",
+      "userId": "u2",
+      "userName": "Thomas Dupont",
+      "employeeId": "emp3",
+      "employeeName": "Pierre Employé",
+      "lastMessage": "Ma commande est-elle prête ?",
+      "lastMessageTime": "2024-10-15T15:45:00Z",
+      "unreadCount": 1
+    },
+    {
+      "id": "conv3",
+      "userId": "u3",
+      "userName": "Marie Laurent",
+      "employeeId": "emp2",
+      "employeeName": "Marie Gérant",
+      "lastMessage": "D'accord, je comprends.",
+      "lastMessageTime": "2024-10-14T18:20:00Z",
+      "unreadCount": 0
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg1",
+      "conversationId": "conv1",
+      "senderId": "u1",
+      "senderName": "Sophie Martin",
+      "senderType": "user",
+      "content": "Bonjour, j'ai une question concernant ma commande.",
+      "timestamp": "2024-10-15T14:15:00Z",
+      "read": true
+    },
+    {
+      "id": "msg2",
+      "conversationId": "conv1",
+      "senderId": "emp2",
+      "senderName": "Marie Gérant",
+      "senderType": "employee",
+      "content": "Bonjour Sophie ! Je suis là pour vous aider. Quelle est votre question ?",
+      "timestamp": "2024-10-15T14:20:00Z",
+      "read": true
+    },
+    {
+      "id": "msg3",
+      "conversationId": "conv1",
+      "senderId": "u1",
+      "senderName": "Sophie Martin",
+      "senderType": "user",
+      "content": "Est-ce possible de modifier ma commande ? J'aimerais ajouter une salade.",
+      "timestamp": "2024-10-15T14:25:00Z",
+      "read": true
+    },
+    {
+      "id": "msg4",
+      "conversationId": "conv1",
+      "senderId": "emp2",
+      "senderName": "Marie Gérant",
+      "senderType": "employee",
+      "content": "Bien sûr ! Je vais ajouter une salade César à votre commande. C'est tout ?",
+      "timestamp": "2024-10-15T14:28:00Z",
+      "read": true
+    },
+    {
+      "id": "msg5",
+      "conversationId": "conv1",
+      "senderId": "u1",
+      "senderName": "Sophie Martin",
+      "senderType": "user",
+      "content": "Merci pour votre réponse rapide !",
+      "timestamp": "2024-10-15T14:30:00Z",
+      "read": true
+    },
+    {
+      "id": "msg6",
+      "conversationId": "conv2",
+      "senderId": "u2",
+      "senderName": "Thomas Dupont",
+      "senderType": "user",
+      "content": "Bonjour, j'ai passé une commande il y a 30 minutes.",
+      "timestamp": "2024-10-15T15:30:00Z",
+      "read": true
+    },
+    {
+      "id": "msg7",
+      "conversationId": "conv2",
+      "senderId": "emp3",
+      "senderName": "Pierre Employé",
+      "senderType": "employee",
+      "content": "Bonjour Thomas ! Votre commande est en cours de préparation.",
+      "timestamp": "2024-10-15T15:35:00Z",
+      "read": true
+    },
+    {
+      "id": "msg8",
+      "conversationId": "conv2",
+      "senderId": "u2",
+      "senderName": "Thomas Dupont",
+      "senderType": "user",
+      "content": "Ma commande est-elle prête ?",
+      "timestamp": "2024-10-15T15:45:00Z",
+      "read": false
+    },
+    {
+      "id": "msg9",
+      "conversationId": "conv3",
+      "senderId": "u3",
+      "senderName": "Marie Laurent",
+      "senderType": "user",
+      "content": "Bonjour, j'aimerais connaître les horaires d'ouverture pour demain.",
+      "timestamp": "2024-10-14T18:00:00Z",
+      "read": true
+    },
+    {
+      "id": "msg10",
+      "conversationId": "conv3",
+      "senderId": "emp2",
+      "senderName": "Marie Gérant",
+      "senderType": "employee",
+      "content": "Bonjour Marie ! Nous sommes ouverts de 11h à 22h demain.",
+      "timestamp": "2024-10-14T18:10:00Z",
+      "read": true
+    },
+    {
+      "id": "msg11",
+      "conversationId": "conv3",
+      "senderId": "u3",
+      "senderName": "Marie Laurent",
+      "senderType": "user",
+      "content": "D'accord, je comprends.",
+      "timestamp": "2024-10-14T18:20:00Z",
+      "read": true
+    }
+  ]
+}

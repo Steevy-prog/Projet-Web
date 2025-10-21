@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, ShoppingCart, Trophy, Gift, Gamepad2, ChevronRight, MessageCircle, Users } from 'lucide-react';
+import { Sparkles, ShoppingCart, Trophy, Gift, Gamepad2, ChevronRight } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { Button } from '../components/ui/button';
 import { menuItems } from '../lib/data';
@@ -13,14 +13,6 @@ interface UserHomeProps {
 
 export function UserHome({ onNavigate }: UserHomeProps) {
   const { user } = useApp();
-
-  // Debug: vérifiez les données utilisateur
-  useEffect(() => {
-    console.log('🔍 UserHome - User data:', user);
-    console.log('🔍 UserHome - User name:', user?.name);
-    console.log('🔍 UserHome - LocalStorage user:', localStorage.getItem('user'));
-    console.log('🔍 UserHome - LocalStorage users:', localStorage.getItem('users'));
-  }, [user]);
 
   const quickActions = [
     {
@@ -51,20 +43,6 @@ export function UserHome({ onNavigate }: UserHomeProps) {
       page: 'loyalty',
       color: 'bg-chart-1',
     },
-    {
-      icon: Users,
-      title: 'Parrainer',
-      description: 'Gagne 100 points',
-      page: 'referral',
-      color: 'bg-purple-500',
-    },
-    {
-      icon: MessageCircle,
-      title: 'Messagerie',
-      description: 'Contacter le restaurant',
-      page: 'user-messaging',
-      color: 'bg-blue-500',
-    },
   ];
 
   const featuredMenus = menuItems.filter((item) => item.popular).slice(0, 3);
@@ -90,10 +68,10 @@ export function UserHome({ onNavigate }: UserHomeProps) {
             </motion.div>
 
             <h1 className="text-3xl md:text-4xl mb-3 text-foreground">
-              Bienvenue, <span className="text-primary">{user?.name || 'Utilisateur'}</span> !
+              Bienvenue, <span className="text-primary">{user?.name}</span> !
             </h1>
             <p className="text-muted-foreground mb-6">
-              Vous avez accumulé {user?.loyaltyPoints || 0} points de fidélité. Continuez à commander et à jouer pour débloquer des récompenses exclusives !
+              Vous avez accumulé {user?.loyaltyPoints} points de fidélité. Continuez à commander et à jouer pour débloquer des récompenses exclusives !
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -123,7 +101,7 @@ export function UserHome({ onNavigate }: UserHomeProps) {
           className="mb-12"
         >
           <h2 className="text-2xl mb-6 text-foreground">Actions Rapides</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (

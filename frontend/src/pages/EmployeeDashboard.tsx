@@ -76,13 +76,6 @@ export function EmployeeDashboard({ onNavigate }: EmployeeDashboardProps) {
       page: 'employee-stats',
       color: 'bg-purple-500/10 text-purple-500',
     },
-    {
-      icon: MessageSquare, // Ajoutez cette importation en haut
-      title: 'Messagerie',
-      description: 'Discuter avec un client',
-      page: 'employee-messaging', // Cette page doit exister dans votre routing
-      color: 'bg-blue-500',
-    },
   ];
 
   const getStatusColor = (status: string) => {

@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppProvider } from './lib/context';
 import { EmployeeProvider } from './lib/employeeContext';
-import { NavigationProvider, useNavigation } from './lib/navigationContext';
-import { HeaderWrapper } from './components/HeaderWrapper';
-import { FooterWrapper } from './components/FooterWrapper';
+import { MessagingProvider } from './lib/messagingContext';
+import { Header } from './components/Header';
+import { EmployeeHeader } from './components/EmployeeHeader';
+import { GerantHeader } from './components/GerantHeader';
+import { AdminHeader } from './components/AdminHeader';
+import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Menus } from './pages/Menus';
 import { Reclamations } from './pages/Reclamations';
 import { Login } from './pages/Login';
-import { ForgotPassword } from './pages/ForgotPassword';
 import { UserHome } from './pages/UserHome';
 import { Dashboard } from './pages/Dashboard';
 import { UserMenus } from './pages/UserMenus';
-import { UserMessaging } from './pages/UserMessaging';
 import { UserReclamation } from './pages/UserReclamation';
 import { Games } from './pages/Games';
 import { Leaderboard } from './pages/Leaderboard';
@@ -22,7 +23,6 @@ import { EmployeeLogin } from './pages/EmployeeLogin';
 import { EmployeeDashboard } from './pages/EmployeeDashboard';
 import { EmployeeOrders } from './pages/EmployeeOrders';
 import { EmployeeMenu } from './pages/EmployeeMenu';
-import { EmployeeMessaging } from './pages/EmployeeMessaging';
 import { EmployeeReclamations } from './pages/EmployeeReclamations';
 import { EmployeeStats } from './pages/EmployeeStats';
 import { GerantDashboard } from './pages/GerantDashboard';
@@ -37,57 +37,69 @@ import { AdminPromotions } from './pages/AdminPromotions';
 import { AdminStats } from './pages/AdminStats';
 import { AdminReclamations } from './pages/AdminReclamations';
 import { AdminSettings } from './pages/AdminSettings';
+import { UserMessaging } from './pages/UserMessaging';
+import { EmployeeMessaging } from './pages/EmployeeMessaging';
 import { Toaster } from './components/ui/sonner';
-import { Referral } from './pages/Referral';
-import { CookieConsent } from './components/CookieConsent';
 
+type Page =
+  | 'home'
+  | 'menus'
+  | 'reclamations'
+  | 'login'
+  | 'user-home'
+  | 'dashboard'
+  | 'user-menus'
+  | 'user-reclamation'
+  | 'games'
+  | 'leaderboard'
+  | 'loyalty'
+  | 'cart'
+  | 'employee-login'
+  | 'employee-dashboard'
+  | 'employee-orders'
+  | 'employee-menu'
+  | 'employee-reclamations'
+  | 'employee-stats'
+  | 'gerant-dashboard'
+  | 'gerant-orders'
+  | 'gerant-employees'
+  | 'gerant-reclamations'
+  | 'gerant-stats'
+  | 'admin-dashboard'
+  | 'admin-menu'
+  | 'admin-employees'
+  | 'admin-promotions'
+  | 'admin-stats'
+  | 'admin-reclamations'
+  | 'admin-settings'
+  | 'user-messaging'
+  | 'employee-messaging';
 
 function AppContent() {
-  const { currentPage, navigate, goBack } = useNavigation();
+  const [currentPage, setCurrentPage] = useState<Page>('home');
 
-  const isEmployeePage = currentPage.startsWith('employee');
-  const isGerantPage = currentPage.startsWith('gerant');
-  const isAdminPage = currentPage.startsWith('admin');
-  const showFooter = !isEmployeePage && !isGerantPage && !isAdminPage;
-
-  const handleNavigate = (page: string) => {
-    const cleanPage = page.startsWith('/') ? page.substring(1) : page;
-    navigate(cleanPage || 'home');
-  };
+  const isEmployeePage = currentPage.startsWith('employee-');
+  const isGerantPage = currentPage.startsWith('gerant-');
+  const isAdminPage = currentPage.startsWith('admin-');
 
   const renderPage = () => {
-    const props = {
-      onNavigate: handleNavigate,
-      onClose: goBack,
-      onForgotPassword: () => navigate('forgot-password')
-    };
-
     switch (currentPage) {
-      // Routes publiques
       case 'home':
-        return <Home {...props} />;
+        return <Home onNavigate={setCurrentPage} />;
       case 'menus':
         return <Menus />;
       case 'reclamations':
         return <Reclamations />;
       case 'login':
-        return <Login {...props} />;
-      case 'forgot-password':
-        return <ForgotPassword {...props} />;
-      
-      // Routes utilisateur
+        return <Login onNavigate={setCurrentPage} />;
       case 'user-home':
-        return <UserHome {...props} />;
+        return <UserHome onNavigate={setCurrentPage} />;
       case 'dashboard':
         return <Dashboard />;
       case 'user-menus':
         return <UserMenus />;
-      case 'user-messaging':
-        return <UserMessaging />;
       case 'user-reclamation':
         return <UserReclamation />;
-      case 'referral':
-        return <Referral />;
       case 'games':
         return <Games />;
       case 'leaderboard':
@@ -95,26 +107,21 @@ function AppContent() {
       case 'loyalty':
         return <Loyalty />;
       case 'cart':
-        return <Cart {...props} />;    
-      // Routes employé
+        return <Cart onNavigate={setCurrentPage} />;
       case 'employee-login':
-        return <EmployeeLogin {...props} />;
+        return <EmployeeLogin onNavigate={setCurrentPage} />;
       case 'employee-dashboard':
-        return <EmployeeDashboard {...props} />;
+        return <EmployeeDashboard onNavigate={setCurrentPage} />;
       case 'employee-orders':
         return <EmployeeOrders />;
       case 'employee-menu':
         return <EmployeeMenu />;
-      case 'employee-messaging':
-        return <EmployeeMessaging />;
       case 'employee-reclamations':
         return <EmployeeReclamations />;
       case 'employee-stats':
         return <EmployeeStats />;
-      
-      // Routes gérant
       case 'gerant-dashboard':
-        return <GerantDashboard {...props} />;
+        return <GerantDashboard onNavigate={setCurrentPage} />;
       case 'gerant-orders':
         return <GerantOrders />;
       case 'gerant-employees':
@@ -123,10 +130,8 @@ function AppContent() {
         return <GerantReclamations />;
       case 'gerant-stats':
         return <GerantStats />;
-      
-      // Routes admin
       case 'admin-dashboard':
-        return <AdminDashboard {...props} />;
+        return <AdminDashboard onNavigate={setCurrentPage} />;
       case 'admin-menu':
         return <AdminMenu />;
       case 'admin-employees':
@@ -139,33 +144,47 @@ function AppContent() {
         return <AdminReclamations />;
       case 'admin-settings':
         return <AdminSettings />;
-      
+      case 'user-messaging':
+        return <UserMessaging />;
+      case 'employee-messaging':
+        return <EmployeeMessaging />;
       default:
-        return <Home {...props} />;
+        return <Home onNavigate={setCurrentPage} />;
     }
   };
 
+  const renderHeader = () => {
+    if (isAdminPage) {
+      return <AdminHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
+    } else if (isGerantPage) {
+      return <GerantHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
+    } else if (isEmployeePage) {
+      return <EmployeeHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
+    } else {
+      return <Header currentPage={currentPage} onNavigate={setCurrentPage} />;
+    }
+  };
+
+  const showFooter = !isEmployeePage && !isGerantPage && !isAdminPage;
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <HeaderWrapper />
-      <main className="flex-1">
-        {renderPage()}
-      </main>
-      {showFooter && <FooterWrapper />}
+      {renderHeader()}
+      <main className="flex-1">{renderPage()}</main>
+      {showFooter && <Footer onNavigate={setCurrentPage} />}
       <Toaster />
-      <CookieConsent />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <NavigationProvider>
-      <AppProvider>
-        <EmployeeProvider>
+    <AppProvider>
+      <EmployeeProvider>
+        <MessagingProvider>
           <AppContent />
-        </EmployeeProvider>
-      </AppProvider>
-    </NavigationProvider>
+        </MessagingProvider>
+      </EmployeeProvider>
+    </AppProvider>
   );
 }
