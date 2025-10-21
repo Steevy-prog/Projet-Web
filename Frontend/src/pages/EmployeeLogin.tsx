@@ -6,6 +6,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useEmployee } from '../lib/employeeContext';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 interface EmployeeLoginProps {
   onNavigate: (page: string) => void;
@@ -173,12 +174,9 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
           transition={{ delay: 0.6 }}
           className="text-center mt-6"
         >
-          <button
-            type="button"
-            onClick={() => onNavigate('home')}
-            className="text-sm text-primary hover:underline"
-          >
-            Retour au site principal
+          <button    type="button"  className="text-sm text-primary hover:underline">
+            <Link to='/'>Retour au site principal</Link>
+
           </button>
         </motion.div>
       </motion.div>
