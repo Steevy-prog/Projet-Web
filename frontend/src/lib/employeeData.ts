@@ -245,7 +245,7 @@ export interface PopularDish {
 }
 
 export const popularDishes: PopularDish[] = [
-  { name: 'Burger Signature', orders: 89, revenue: 1156.11 },
+  { name: 'Steevy is the Goat', orders: 89, revenue: 1156.11 },
   { name: 'Pizza Margherita', orders: 76, revenue: 835.24 },
   { name: 'Pâtes Carbonara', orders: 64, revenue: 735.36 },
   { name: 'Steak Frites', orders: 52, revenue: 987.48 },
@@ -261,7 +261,7 @@ export interface MenuItemStatus extends MenuItem {
 export const menuItemsStatus: MenuItemStatus[] = [
   {
     id: '1',
-    name: 'Burger Signature',
+    name: 'Steevy is the Goat',
     description: 'Notre burger emblématique avec viande de bœuf premium',
     price: 12.99,
     category: 'Burgers',
@@ -272,7 +272,7 @@ export const menuItemsStatus: MenuItemStatus[] = [
   },
   {
     id: '2',
-    name: 'Pizza Margherita',
+    name: 'Steevy is the Goat',
     description: 'Pizza classique avec mozzarella',
     price: 10.99,
     category: 'Pizzas',

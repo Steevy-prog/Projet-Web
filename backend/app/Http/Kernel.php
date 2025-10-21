@@ -6,8 +6,13 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
 {
-
-
+    protected $middlewareGroups = [
+    'web' => [
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \App\Http\Middleware\UserPreferences::class,  // <--- add here
+        // ...
+    ],
+    ];
     /**
      * Route middleware.
      */
