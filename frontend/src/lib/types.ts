@@ -6,6 +6,12 @@ export interface User {
   gamesPlayed: number;
   ordersCount: number;
   rank: number;
+  // Système de parrainage
+  referralCode: string;
+  referredBy?: string;
+  referralCount: number;
+  phone?: string;
+  location?: string;
 }
 
 export interface MenuItem {
@@ -109,4 +115,19 @@ export interface AppSettings {
     phone: string;
     address: string;
   };
+}
+
+export interface Referral {
+  id: string;
+  referrerId: string;
+  referredUserId: string;
+  referralCode: string;
+  date: Date;
+  rewardClaimed: boolean;
+}
+
+export interface ReferralStats {
+  referralCount: number;
+  earnedPoints: number;
+  pendingRewards: number;
 }

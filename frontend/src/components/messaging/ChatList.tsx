@@ -1,25 +1,19 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { User, UserCircle, Search } from 'lucide-react';
-import { Badge } from '../ui/badge';
+import { User, Clock, MessageCircle } from 'lucide-react';
 
-/**
- * Interface définissant une conversation
- */
 interface Conversation {
   id: string;
   userId: string;
   userName: string;
   employeeId: string;
   employeeName: string;
-  lastMessage: string;
-  lastMessageTime: string;
+  lastMessage?: string;
+  lastMessageTime?: string;
   unreadCount: number;
+  updatedAt: string;
 }
 
-/**
- * Props du composant ChatList
- */
 interface ChatListProps {
   conversations: Conversation[];
   selectedConversationId: string | null;
@@ -28,10 +22,6 @@ interface ChatListProps {
   userType: 'user' | 'employee';
 }
 
-/**
- * Composant ChatList - Liste des conversations
- * Affiche toutes les conversations avec un aperçu du dernier message
- */
 export function ChatList({
   conversations,
   selectedConversationId,
@@ -39,117 +29,123 @@ export function ChatList({
   currentUserId,
   userType,
 }: ChatListProps) {
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  /**
-   * Formatage de la date du dernier message
-   */
-  const formatLastMessageTime = (timestamp: string) => {
-    const date = new Date(timestamp);
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 
-    if (diffInHours < 1) {
-      return 'À l\'instant';
-    } else if (diffInHours < 24) {
-      return `Il y a ${diffInHours}h`;
+    if (diffInHours < 24) {
+      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    } else if (diffInHours < 48) {
+      return 'Hier';
     } else {
       return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
     }
   };
 
-  /**
-   * Obtient le nom de l'interlocuteur selon le type d'utilisateur
-   */
-  const getInterlocutorName = (conversation: Conversation) => {
-    return userType === 'user' ? conversation.employeeName : conversation.userName;
+  const getDisplayName = (conversation: Conversation) => {
+    if (userType === 'employee') {
+      return conversation.userName;
+    } else {
+      return conversation.employeeName;
+    }
   };
 
-  /**
-   * Filtre les conversations selon la recherche
-   */
-  const filteredConversations = conversations.filter((conv) => {
-    const interlocutorName = getInterlocutorName(conv);
-    return interlocutorName.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  const getRoleText = (conversation: Conversation) => {
+    if (userType === 'employee') {
+      return 'Étudiant';
+    } else {
+      return 'Employé';
+    }
+  };
 
   return (
-    <div className="w-full md:w-80 border-r border-border bg-card flex flex-col h-full">
+    <div className="w-full md:w-80 border-r border-border h-full flex flex-col bg-card">
       {/* En-tête de la liste */}
-      <div className="p-4 border-b border-border">
-        <h2 className="text-xl font-semibold mb-4">Messagerie</h2>
-
-        {/* Barre de recherche */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-2xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+      <div className="p-6 border-b border-border bg-gradient-to-r from-card to-card/80">
+        <div className="flex items-center gap-3 mb-2">
+          <MessageCircle className="size-6 text-primary" />
+          <h2 className="font-bold text-xl">Conversations</h2>
         </div>
+        <p className="text-sm text-muted-foreground">
+          {conversations.length} conversation(s)
+        </p>
       </div>
 
       {/* Liste des conversations */}
       <div className="flex-1 overflow-y-auto">
-        {filteredConversations.length === 0 ? (
-          <div className="p-4 text-center text-muted-foreground">
-            {searchQuery ? 'Aucune conversation trouvée' : 'Aucune conversation'}
-          </div>
-        ) : (
-          filteredConversations.map((conversation, index) => {
-            const isSelected = conversation.id === selectedConversationId;
-            const interlocutorName = getInterlocutorName(conversation);
+        {conversations.map((conversation) => (
+          <motion.div
+            key={conversation.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className={`border-b border-border cursor-pointer transition-all duration-200 ${
+              selectedConversationId === conversation.id 
+                ? 'bg-primary/10 border-l-4 border-l-primary' 
+                : 'hover:bg-accent/50'
+            }`}
+            onClick={() => onSelectConversation(conversation.id)}
+          >
+            <div className="p-4">
+              <div className="flex items-start gap-3">
+                {/* Avatar */}
+                <div className={`size-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  selectedConversationId === conversation.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground'
+                }`}>
+                  <User className="size-5" />
+                </div>
 
-            return (
-              <motion.button
-                key={conversation.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                onClick={() => onSelectConversation(conversation.id)}
-                className={`w-full p-4 border-b border-border text-left transition-colors ${
-                  isSelected ? 'bg-primary/10' : 'hover:bg-secondary'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  {/* Avatar */}
-                  <div className="size-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                    {userType === 'user' ? (
-                      <UserCircle className="size-5 text-primary" />
-                    ) : (
-                      <User className="size-5 text-primary" />
-                    )}
+                {/* Contenu */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className={`font-semibold truncate ${
+                      selectedConversationId === conversation.id ? 'text-primary' : 'text-foreground'
+                    }`}>
+                      {getDisplayName(conversation)}
+                    </h3>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Clock className="size-3" />
+                      <span>{formatTime(conversation.updatedAt)}</span>
+                    </div>
                   </div>
 
-                  {/* Informations de la conversation */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-medium text-sm truncate">{interlocutorName}</h3>
-                      <span className="text-xs text-muted-foreground flex-shrink-0 ml-2">
-                        {formatLastMessageTime(conversation.lastMessageTime)}
+                  <p className="text-xs text-muted-foreground mb-1">
+                    {getRoleText(conversation)}
+                  </p>
+
+                  <p className="text-sm text-muted-foreground truncate mb-2">
+                    {conversation.lastMessage || 'Aucun message'}
+                  </p>
+
+                  {/* Badge des messages non lus */}
+                  {conversation.unreadCount > 0 && (
+                    <div className="flex justify-end">
+                      <span className="inline-flex items-center justify-center size-6 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                        {conversation.unreadCount}
                       </span>
                     </div>
-
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground truncate">
-                        {conversation.lastMessage}
-                      </p>
-                      {conversation.unreadCount > 0 && (
-                        <Badge className="ml-2 bg-primary text-primary-foreground flex-shrink-0">
-                          {conversation.unreadCount}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+                  )}
                 </div>
-              </motion.button>
-            );
-          })
-        )}
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Message si aucune conversation */}
+      {conversations.length === 0 && (
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="text-center">
+            <MessageCircle className="size-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+            <p className="text-muted-foreground text-lg">Aucune conversation</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Commencez une nouvelle conversation
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

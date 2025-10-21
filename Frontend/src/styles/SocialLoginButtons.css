@@ -1,0 +1,156 @@
+/* Conteneur des boutons sociaux */
+.social-login-container {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+/* Séparateur "Ou continuer avec" */
+.social-login-divider {
+  position: relative;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.social-login-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: hsl(var(--border));
+}
+
+.social-login-divider-text {
+  position: relative;
+  display: inline-block;
+  padding: 0 0.75rem;
+  background: hsl(var(--background));
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Conteneur des boutons */
+.social-login-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style de base des boutons */
+.social-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 0;
+}
+
+/* Icône dans le bouton */
+.social-login-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Effet hover général */
+.social-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-login-btn:hover .social-login-icon {
+  transform: scale(1.1);
+}
+
+/* Effet actif */
+.social-login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton Google - effet hover spécifique */
+.google-btn:hover {
+  background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+  border-color: #4285F4;
+}
+
+.google-btn:hover .social-login-icon path {
+  fill: white;
+}
+
+/* Bouton Facebook - effet hover spécifique */
+.facebook-btn:hover {
+  background: #1877F2;
+  border-color: #1877F2;
+}
+
+.facebook-btn:hover .social-login-icon path {
+  fill: white;
+}
+
+/* Bouton Instagram - effet hover spécifique */
+.instagram-btn:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border-color: #E4405F;
+}
+
+.instagram-btn:hover .social-login-icon path {
+  fill: white;
+}
+
+/* Focus pour l'accessibilité */
+.social-login-btn:focus {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Animation de chargement (optionnelle) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.social-login-btn.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.social-login-btn.loading .social-login-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .social-login-btn {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .social-login-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+  .social-login-btn {
+    background: hsl(var(--card));
+    border-color: hsl(var(--border));
+  }
+  
+  .social-login-divider::before {
+    background: hsl(var(--border));
+  }
+}
