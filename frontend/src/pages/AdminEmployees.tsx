@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Users, UserPlus, Edit, Trash2, Shield, User, GraduationCap, Briefcase } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -11,8 +13,13 @@ import { Employee } from '../lib/types';
 
 export function AdminEmployees() {
   const { employees, addEmployee, updateEmployee, deleteEmployee } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   const [formData, setFormData] = useState({
     name: '',
     email: '',

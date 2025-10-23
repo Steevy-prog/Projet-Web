@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { ShoppingCart, Plus, Minus, Trash2, Send } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { Button } from '../components/ui/button';
@@ -13,6 +15,11 @@ interface CartProps {
 
 export function Cart({ onNavigate }: CartProps) {
   const { cart, removeFromCart, updateQuantity, clearCart, cartTotal } = useApp();
+  const [isLoading] = usePageLoading(800);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleCheckout = () => {
     if (cart.length === 0) {

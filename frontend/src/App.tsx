@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppProvider } from './lib/context';
 import { EmployeeProvider } from './lib/employeeContext';
-import { MessagingProvider } from './lib/messagingContext';
-import { Header } from './components/Header';
-import { EmployeeHeader } from './components/EmployeeHeader';
-import { GerantHeader } from './components/GerantHeader';
-import { AdminHeader } from './components/AdminHeader';
-import { Footer } from './components/Footer';
+import { NavigationProvider, useNavigation } from './lib/navigationContext';
+import Loading from './pages/loading';
+import { HeaderWrapper } from './components/HeaderWrapper';
+import { FooterWrapper } from './components/FooterWrapper';
 import { Home } from './pages/Home';
 import { Menus } from './pages/Menus';
 import { Reclamations } from './pages/Reclamations';
 import { Login } from './pages/Login';
+import { ForgotPassword } from './pages/ForgotPassword';
 import { UserHome } from './pages/UserHome';
 import { Dashboard } from './pages/Dashboard';
 import { UserMenus } from './pages/UserMenus';
+import { UserMessaging } from './pages/UserMessaging';
 import { UserReclamation } from './pages/UserReclamation';
 import { Games } from './pages/Games';
 import { Leaderboard } from './pages/Leaderboard';
@@ -23,6 +23,7 @@ import { EmployeeLogin } from './pages/EmployeeLogin';
 import { EmployeeDashboard } from './pages/EmployeeDashboard';
 import { EmployeeOrders } from './pages/EmployeeOrders';
 import { EmployeeMenu } from './pages/EmployeeMenu';
+import { EmployeeMessaging } from './pages/EmployeeMessaging';
 import { EmployeeReclamations } from './pages/EmployeeReclamations';
 import { EmployeeStats } from './pages/EmployeeStats';
 import { GerantDashboard } from './pages/GerantDashboard';
@@ -37,69 +38,75 @@ import { AdminPromotions } from './pages/AdminPromotions';
 import { AdminStats } from './pages/AdminStats';
 import { AdminReclamations } from './pages/AdminReclamations';
 import { AdminSettings } from './pages/AdminSettings';
-import { UserMessaging } from './pages/UserMessaging';
-import { EmployeeMessaging } from './pages/EmployeeMessaging';
 import { Toaster } from './components/ui/sonner';
+import { Referral } from './pages/Referral';
+import { CookieConsent } from './components/CookieConsent';
 
-type Page =
-  | 'home'
-  | 'menus'
-  | 'reclamations'
-  | 'login'
-  | 'user-home'
-  | 'dashboard'
-  | 'user-menus'
-  | 'user-reclamation'
-  | 'games'
-  | 'leaderboard'
-  | 'loyalty'
-  | 'cart'
-  | 'employee-login'
-  | 'employee-dashboard'
-  | 'employee-orders'
-  | 'employee-menu'
-  | 'employee-reclamations'
-  | 'employee-stats'
-  | 'gerant-dashboard'
-  | 'gerant-orders'
-  | 'gerant-employees'
-  | 'gerant-reclamations'
-  | 'gerant-stats'
-  | 'admin-dashboard'
-  | 'admin-menu'
-  | 'admin-employees'
-  | 'admin-promotions'
-  | 'admin-stats'
-  | 'admin-reclamations'
-  | 'admin-settings'
-  | 'user-messaging'
-  | 'employee-messaging';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const { currentPage, navigate, goBack } = useNavigation();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const isEmployeePage = currentPage.startsWith('employee-');
-  const isGerantPage = currentPage.startsWith('gerant-');
-  const isAdminPage = currentPage.startsWith('admin-');
+  useEffect(() => {
+    // Simuler un chargement initial
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Afficher le loading lors du changement de page
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [currentPage]);
+
+  const isEmployeePage = currentPage.startsWith('employee');
+  const isGerantPage = currentPage.startsWith('gerant');
+  const isAdminPage = currentPage.startsWith('admin');
+  const showFooter = !isEmployeePage && !isGerantPage && !isAdminPage;
+
+  const handleNavigate = (page: string) => {
+    const cleanPage = page.startsWith('/') ? page.substring(1) : page;
+    navigate(cleanPage || 'home');
+  };
 
   const renderPage = () => {
+    const props = {
+      onNavigate: handleNavigate,
+      onClose: goBack,
+      onForgotPassword: () => navigate('forgot-password')
+    };
+
     switch (currentPage) {
+      // Routes publiques
       case 'home':
-        return <Home onNavigate={setCurrentPage} />;
+        return <Home {...props} />;
       case 'menus':
         return <Menus />;
       case 'reclamations':
         return <Reclamations />;
       case 'login':
-        return <Login onNavigate={setCurrentPage} />;
+        return <Login {...props} />;
+      case 'forgot-password':
+        return <ForgotPassword {...props} />;
+      
+      // Routes utilisateur
       case 'user-home':
-        return <UserHome onNavigate={setCurrentPage} />;
+        return <UserHome {...props} />;
       case 'dashboard':
         return <Dashboard />;
       case 'user-menus':
         return <UserMenus />;
+      case 'user-messaging':
+        return <UserMessaging />;
       case 'user-reclamation':
         return <UserReclamation />;
+      case 'referral':
+        return <Referral />;
       case 'games':
         return <Games />;
       case 'leaderboard':
@@ -107,21 +114,26 @@ function AppContent() {
       case 'loyalty':
         return <Loyalty />;
       case 'cart':
-        return <Cart onNavigate={setCurrentPage} />;
+        return <Cart {...props} />;    
+      // Routes employé
       case 'employee-login':
-        return <EmployeeLogin onNavigate={setCurrentPage} />;
+        return <EmployeeLogin {...props} />;
       case 'employee-dashboard':
-        return <EmployeeDashboard onNavigate={setCurrentPage} />;
+        return <EmployeeDashboard {...props} />;
       case 'employee-orders':
         return <EmployeeOrders />;
       case 'employee-menu':
         return <EmployeeMenu />;
+      case 'employee-messaging':
+        return <EmployeeMessaging />;
       case 'employee-reclamations':
         return <EmployeeReclamations />;
       case 'employee-stats':
         return <EmployeeStats />;
+      
+      // Routes gérant
       case 'gerant-dashboard':
-        return <GerantDashboard onNavigate={setCurrentPage} />;
+        return <GerantDashboard {...props} />;
       case 'gerant-orders':
         return <GerantOrders />;
       case 'gerant-employees':
@@ -130,8 +142,10 @@ function AppContent() {
         return <GerantReclamations />;
       case 'gerant-stats':
         return <GerantStats />;
+      
+      // Routes admin
       case 'admin-dashboard':
-        return <AdminDashboard onNavigate={setCurrentPage} />;
+        return <AdminDashboard {...props} />;
       case 'admin-menu':
         return <AdminMenu />;
       case 'admin-employees':
@@ -144,47 +158,37 @@ function AppContent() {
         return <AdminReclamations />;
       case 'admin-settings':
         return <AdminSettings />;
-      case 'user-messaging':
-        return <UserMessaging />;
-      case 'employee-messaging':
-        return <EmployeeMessaging />;
+      
       default:
-        return <Home onNavigate={setCurrentPage} />;
+        return <Home {...props} />;
     }
   };
-
-  const renderHeader = () => {
-    if (isAdminPage) {
-      return <AdminHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else if (isGerantPage) {
-      return <GerantHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else if (isEmployeePage) {
-      return <EmployeeHeader currentPage={currentPage} onNavigate={setCurrentPage} />;
-    } else {
-      return <Header currentPage={currentPage} onNavigate={setCurrentPage} />;
-    }
-  };
-
-  const showFooter = !isEmployeePage && !isGerantPage && !isAdminPage;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {renderHeader()}
-      <main className="flex-1">{renderPage()}</main>
-      {showFooter && <Footer onNavigate={setCurrentPage} />}
+      <HeaderWrapper />
+      <main className="flex-1">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          renderPage()
+        )}
+      </main>
+      {showFooter && <FooterWrapper />}
       <Toaster />
+      <CookieConsent />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <AppProvider>
-      <EmployeeProvider>
-        <MessagingProvider>
+    <NavigationProvider>
+      <AppProvider>
+        <EmployeeProvider>
           <AppContent />
-        </MessagingProvider>
-      </EmployeeProvider>
-    </AppProvider>
+        </EmployeeProvider>
+      </AppProvider>
+    </NavigationProvider>
   );
 }

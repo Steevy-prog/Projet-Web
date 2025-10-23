@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Users, ShoppingBag, TrendingUp, MessageSquare, DollarSign, Award } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { StatCard } from '../components/StatCard';
@@ -12,6 +14,11 @@ interface GerantDashboardProps {
 
 export function GerantDashboard({ onNavigate }: GerantDashboardProps) {
   const { employee, orders, reclamations, employees } = useEmployee();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);

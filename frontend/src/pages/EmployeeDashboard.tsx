@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { ShoppingBag, Clock, CheckCircle, AlertCircle, Package, UtensilsCrossed, MessageSquare, BarChart3 } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -12,6 +14,11 @@ interface EmployeeDashboardProps {
 
 export function EmployeeDashboard({ onNavigate }: EmployeeDashboardProps) {
   const { employee, orders, reclamations } = useEmployee();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const pendingOrders = orders.filter((order) => order.status === 'pending').length;
   const preparingOrders = orders.filter((order) => order.status === 'preparing').length;
@@ -75,6 +82,13 @@ export function EmployeeDashboard({ onNavigate }: EmployeeDashboardProps) {
       description: 'Voir les performances',
       page: 'employee-stats',
       color: 'bg-purple-500/10 text-purple-500',
+    },
+    {
+      icon: MessageSquare, // Ajoutez cette importation en haut
+      title: 'Messagerie',
+      description: 'Discuter avec un client',
+      page: 'employee-messaging', // Cette page doit exister dans votre routing
+      color: 'bg-blue-500',
     },
   ];
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { MessageSquare, CheckCircle, XCircle, Eye, AlertCircle, User } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -9,10 +11,15 @@ import { toast } from 'sonner';
 
 export function AdminReclamations() {
   const { reclamations, updateReclamationStatus, employees } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterType, setFilterType] = useState<string>('all');
   const [selectedReclamation, setSelectedReclamation] = useState<string | null>(null);
   const [adminNote, setAdminNote] = useState('');
+
+  if (isLoading) {
+    return <Loading />;
+  }
   const [assignedEmployee, setAssignedEmployee] = useState('');
 
   const filteredReclamations = reclamations.filter((rec) => {

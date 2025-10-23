@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { ShoppingBag, Clock, CheckCircle, Package, Truck, Filter } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -8,7 +10,12 @@ import { toast } from 'sonner';
 
 export function EmployeeOrders() {
   const { orders, updateOrderStatus } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const filteredOrders = filterStatus === 'all'
     ? orders

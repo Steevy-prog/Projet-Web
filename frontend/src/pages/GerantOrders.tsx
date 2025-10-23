@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { ShoppingBag, Clock, CheckCircle, Package, Truck, Filter, Calendar, User } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -7,8 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 export function GerantOrders() {
   const { orders } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('date');
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   let filteredOrders = filterStatus === 'all'
     ? orders

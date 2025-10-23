@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Send, Award, Heart, Users } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -10,12 +12,17 @@ import { toast } from 'sonner@2.0.3';
 import { companyStory } from '../lib/data';
 
 export function Reclamations() {
+  const [isLoading] = usePageLoading(900);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     type: '',
     message: '',
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

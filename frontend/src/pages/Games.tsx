@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { X, Coins } from 'lucide-react';
 import { games } from '../lib/data';
 import { GameCard } from '../components/GameCard';
@@ -10,7 +12,12 @@ import { toast } from 'sonner@2.0.3';
 
 export function Games() {
   const { user, setUser } = useApp();
+  const [isLoading] = usePageLoading(1000);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handlePlayGame = (game: Game) => {
     setSelectedGame(game);

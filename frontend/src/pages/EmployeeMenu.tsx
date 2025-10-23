@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { UtensilsCrossed, Star, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -8,7 +10,12 @@ import { formatPriceFromEur } from '../lib/formatPrice';
 
 export function EmployeeMenu() {
   const { menuItems, toggleMenuItemAvailability, setDishOfDay } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [filterCategory, setFilterCategory] = useState<string>('all');
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const categories = ['all', ...Array.from(new Set(menuItems.map((item) => item.category)))];
 

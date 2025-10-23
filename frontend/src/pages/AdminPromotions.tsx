@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Tag, Plus, Edit, Trash2, Calendar, Percent } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -12,7 +14,12 @@ import { Promotion } from '../lib/types';
 
 export function AdminPromotions() {
   const { promotions, addPromotion, updatePromotion, deletePromotion } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [isAdding, setIsAdding] = useState(false);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',

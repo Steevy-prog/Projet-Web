@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Menu, X, Utensils, ShoppingBag, Users, MessageSquare, BarChart3, LogOut, Home, MessageCircle } from 'lucide-react';
+import { Menu, X, Utensils, ShoppingBag, Users, MessageSquare, BarChart3, LogOut, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useEmployee } from '../lib/employeeContext';
-import { useMessaging } from '../lib/messagingContext';
 import { Badge } from './ui/badge';
 
 interface GerantHeaderProps {
@@ -13,7 +12,6 @@ interface GerantHeaderProps {
 export function GerantHeader({ currentPage, onNavigate }: GerantHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { employee, logout, orders, reclamations } = useEmployee();
-  const { getUnreadCount } = useMessaging();
 
   const handleLogout = () => {
     logout();
@@ -28,13 +26,11 @@ export function GerantHeader({ currentPage, onNavigate }: GerantHeaderProps) {
 
   const pendingOrders = orders.filter((order) => order.status === 'pending').length;
   const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
-  const unreadMessagesCount = employee ? getUnreadCount(employee.id, 'employee') : 0;
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', page: 'gerant-dashboard' },
     { icon: ShoppingBag, label: 'Commandes', page: 'gerant-orders', badge: pendingOrders },
     { icon: Users, label: 'Employés', page: 'gerant-employees' },
-    { icon: MessageCircle, label: 'Messagerie', page: 'employee-messaging', badge: unreadMessagesCount },
     { icon: MessageSquare, label: 'Réclamations', page: 'gerant-reclamations', badge: pendingReclamations },
     { icon: BarChart3, label: 'Statistiques', page: 'gerant-stats' },
   ];

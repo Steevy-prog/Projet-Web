@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Search, Filter } from 'lucide-react';
 import { menuItems } from '../lib/data';
 import { MenuCard } from '../components/MenuCard';
@@ -7,11 +9,17 @@ import { useApp } from '../lib/context';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner@2.0.3';
+import { Footer } from '../components/Footer'; // Chemin corrigé
 
 export function UserMenus() {
   const { addToCart } = useApp();
+  const [isLoading] = usePageLoading(1000);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const categories = ['all', ...Array.from(new Set(menuItems.map((item) => item.category)))];
 
@@ -107,6 +115,12 @@ export function UserMenus() {
           </motion.div>
         )}
       </div>
+
+      {/* Footer avec masquage du lien Espace Employé */}
+      <div className="footer-no-employee">
+        <Footer />
+      </div>
+      
     </div>
   );
 }

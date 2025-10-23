@@ -14,13 +14,13 @@ export function formatPrice(price: number): string {
  */
 export function convertEurToFcfa(priceInEur: number): number {
   const conversionRate = 655.957;
-  return Math.round(priceInEur * conversionRate);
+  return Math.round(priceInEur * conversionRate/100)*100;
 }
 
 /**
  * Formate et convertit un prix de EUR à FCFA
  * @param priceInEur - Le prix en euros
- * @returns Le prix formaté en FCFA
+ * @returns en FCFA
  */
 export function formatPriceFromEur(priceInEur: number): string {
   const priceInFcfa = convertEurToFcfa(priceInEur);

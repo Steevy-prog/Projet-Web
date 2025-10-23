@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Trophy, Gamepad2, ShoppingBag, TrendingUp, Award } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { StatCard } from '../components/StatCard';
@@ -7,6 +9,11 @@ import { Progress } from '../components/ui/progress';
 
 export function Dashboard() {
   const { user } = useApp();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const stats = [
     {

@@ -1,11 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { BarChart3, TrendingUp, DollarSign, ShoppingBag, Award, Users } from 'lucide-react';
 import { weeklyStats, popularDishes } from '../lib/employeeData';
 import { useEmployee } from '../lib/employeeContext';
 
 export function GerantStats() {
   const { orders, employees } = useEmployee();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const totalOrders = weeklyStats.reduce((sum, day) => sum + day.orders, 0);
   const totalRevenue = weeklyStats.reduce((sum, day) => sum + day.revenue, 0);

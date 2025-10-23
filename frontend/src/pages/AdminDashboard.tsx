@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Users, ShoppingBag, TrendingUp, MessageSquare, DollarSign, Award, UtensilsCrossed, Tag } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { StatCard } from '../components/StatCard';
@@ -12,6 +14,11 @@ interface AdminDashboardProps {
 
 export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const { employee, orders, reclamations, employees, menuItems, promotions } = useEmployee();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);

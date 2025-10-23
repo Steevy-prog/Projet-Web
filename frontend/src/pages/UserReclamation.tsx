@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Send, MessageSquare } from 'lucide-react';
 import { useApp } from '../lib/context';
 import { Button } from '../components/ui/button';
@@ -10,6 +12,7 @@ import { toast } from 'sonner@2.0.3';
 
 export function UserReclamation() {
   const { user } = useApp();
+  const [isLoading] = usePageLoading(800);
   const [formData, setFormData] = useState({
     type: '',
     message: '',
@@ -24,6 +27,10 @@ export function UserReclamation() {
     toast.success('Votre réclamation a été envoyée avec succès. Nous vous contacterons bientôt.');
     setFormData({ type: '', message: '' });
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="min-h-screen py-12 px-4">

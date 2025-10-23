@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { UtensilsCrossed, Plus, Edit, Trash2, Eye, EyeOff, Star } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -12,7 +14,12 @@ import { MenuItemStatus } from '../lib/employeeData';
 
 export function AdminMenu() {
   const { menuItems, addMenuItem, updateMenuItem, deleteMenuItem } = useEmployee();
+  const [isLoading] = usePageLoading(900);
   const [isAdding, setIsAdding] = useState(false);
+
+  if (isLoading) {
+    return <Loading />;
+  }
   const [editingId, setEditingId] = useState<string | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [formData, setFormData] = useState({

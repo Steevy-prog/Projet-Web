@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Settings, Clock, FileText, Mail, Phone, MapPin, Save } from 'lucide-react';
 import { useEmployee } from '../lib/employeeContext';
 import { Button } from '../components/ui/button';
@@ -10,7 +12,12 @@ import { toast } from 'sonner';
 
 export function AdminSettings() {
   const { settings, updateSettings } = useEmployee();
+  const [isLoading] = usePageLoading(800);
   const [formData, setFormData] = useState(settings);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

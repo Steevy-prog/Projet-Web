@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Gift, Star, Sparkles, Check } from 'lucide-react';
 import { rewards } from '../lib/data';
 import { useApp } from '../lib/context';
@@ -10,6 +12,11 @@ import { toast } from 'sonner@2.0.3';
 
 export function Loyalty() {
   const { user, setUser } = useApp();
+  const [isLoading] = usePageLoading(1200);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleRedeemReward = (reward: any) => {
     if (!user) return;

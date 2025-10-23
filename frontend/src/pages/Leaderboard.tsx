@@ -1,11 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { usePageLoading } from '../hooks/usePageLoading';
+import Loading from './loading';
 import { Trophy, Medal, Crown, TrendingUp } from 'lucide-react';
 import { leaderboard } from '../lib/data';
 import { useApp } from '../lib/context';
 
 export function Leaderboard() {
   const { user } = useApp();
+  const [isLoading] = usePageLoading(1000);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const getPositionIcon = (rank: number) => {
     if (rank === 1) return <Crown className="size-6 text-yellow-400" />;
