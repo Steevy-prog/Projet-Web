@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Menu, X, Utensils, UtensilsCrossed, Users, Tag, MessageSquare, BarChart3, Settings, LogOut, Home, MessageCircle } from 'lucide-react';
+import { Menu, X, Utensils, UtensilsCrossed, Users, Tag, MessageSquare, BarChart3, Settings, LogOut, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useEmployee } from '../lib/employeeContext';
-import { useMessaging } from '../lib/messagingContext';
 import { Badge } from './ui/badge';
 
 interface AdminHeaderProps {
@@ -13,7 +12,6 @@ interface AdminHeaderProps {
 export function AdminHeader({ currentPage, onNavigate }: AdminHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { employee, logout, reclamations, promotions } = useEmployee();
-  const { getUnreadCount } = useMessaging();
 
   const handleLogout = () => {
     logout();
@@ -28,14 +26,12 @@ export function AdminHeader({ currentPage, onNavigate }: AdminHeaderProps) {
 
   const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
   const activePromotions = promotions.filter((promo) => promo.active).length;
-  const unreadMessagesCount = employee ? getUnreadCount(employee.id, 'employee') : 0;
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', page: 'admin-dashboard' },
     { icon: UtensilsCrossed, label: 'Menu', page: 'admin-menu' },
     { icon: Users, label: 'Employés', page: 'admin-employees' },
     { icon: Tag, label: 'Promotions', page: 'admin-promotions', badge: activePromotions },
-    { icon: MessageCircle, label: 'Messagerie', page: 'employee-messaging', badge: unreadMessagesCount },
     { icon: BarChart3, label: 'Statistiques', page: 'admin-stats' },
     { icon: MessageSquare, label: 'Réclamations', page: 'admin-reclamations', badge: pendingReclamations },
     { icon: Settings, label: 'Paramètres', page: 'admin-settings' },

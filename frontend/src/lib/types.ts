@@ -1,53 +1,41 @@
-export interface Utilisateur {
-  id_utilisateur: string;
-  nom: string;
-  prenom: string;
+export interface User {
+  id: string;
+  name: string;
   email: string;
-  mot_de_passe: string;
-  telephone: string;
-  localisation?: string;
-  id_role: number;
-  id_parrain?: number;
-  date_creation: string;
-  derniere_connexion: string;
-  date_modification: string;
   loyaltyPoints: number;
   gamesPlayed: number;
   ordersCount: number;
   rank: number;
+  // Système de parrainage
+  referralCode: string;
+  referredBy?: string;
+  referralCount: number;
+  phone?: string;
+  location?: string;
 }
 
 export interface MenuItem {
-  id: string;                // id_article
-  name: string;              // nom
-  description: string;       // description
-  price: number;             // prix
-  category: string;          // id_categorie mapped to category name (join with categorie table)
-  image: string;             // image_url
-  popular?: boolean;         // est_promotion or a "popular" flag
-  available?: boolean;       // disponible
-  stock?: number;            // stock_disponible
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  popular?: boolean;
 }
 
 export interface CartItem {
-  menuItem: MenuItem;       // linked article
-  quantity: number;         // quantite
-  subtotal?: number;        // sous_total
-  comment?: string;         // commentaire_article
+  menuItem: MenuItem;
+  quantity: number;
 }
 
 export interface Order {
-  id: string;               // id_commande
-  userId: string;           // id_utilisateur
-  userEmail: string;        // from utilisateur.email
-  userName: string;         // from utilisateur.nom + prenom
-  items: CartItem[];        // array of cart items
-  total: number;            // montant_total
-  status: 'en attente' | 'confirmee' | 'livree'; // statut
-  createdAt: Date;          // date_commande
-  typeService?: 'sur_place' | 'livraison'; // type_service
-  arrivalTime?: Date;       // heure_arrivee
-  orderNumber?: string;     // numero_commande
+  id: string;
+  userId: string;
+  items: CartItem[];
+  total: number;
+  status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered';
+  createdAt: Date;
 }
 
 export interface Game {
@@ -75,7 +63,7 @@ export interface Reclamation {
   email: string;
   type: 'service' | 'food' | 'delivery' | 'other';
   message: string;
-  status: 'en attente' | 'revu' | 'resolu';
+  status: 'pending' | 'reviewed' | 'resolved';
   createdAt: Date;
 }
 
@@ -87,20 +75,13 @@ export interface LeaderboardEntry {
   gamesPlayed: number;
 }
 
-
-export interface Employee extends Utilisateur{
-  id_employe: number;
-  poste: string;
-  date_embauche: string;
-  salaire: number;
-  est_actif: boolean;
-  date_creation: string;
+export interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'gerant' | 'employe' | 'etudiant';
 }
-
-export interface realemployee {
-
-}
-
 
 export interface OrderWithDetails extends Order {
   userName: string;
@@ -134,4 +115,19 @@ export interface AppSettings {
     phone: string;
     address: string;
   };
+}
+
+export interface Referral {
+  id: string;
+  referrerId: string;
+  referredUserId: string;
+  referralCode: string;
+  date: Date;
+  rewardClaimed: boolean;
+}
+
+export interface ReferralStats {
+  referralCount: number;
+  earnedPoints: number;
+  pendingRewards: number;
 }

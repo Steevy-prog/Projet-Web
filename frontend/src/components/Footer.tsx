@@ -2,8 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import SocialButtons from './SocialButtons';
 import { Utensils, Facebook, Instagram, Twitter, Mail, Phone, MapPin, Briefcase } from 'lucide-react';
-import logo from './assets/logo.svg';
-
 
 interface FooterProps {
   onNavigate?: (page: string) => void;
@@ -30,7 +28,7 @@ export function Footer({ onNavigate }: FooterProps = {}) {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="size-10 rounded-2xl bg-primary flex items-center justify-center">
-                <img src={logo} alt="Restaurant Logo" className="w-full h-full object-cover" />
+                <Utensils className="size-6 text-primary-foreground" />
               </div>
               <span className="text-primary">Restaurant Zeduc-Space</span>
             </div>

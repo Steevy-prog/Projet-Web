@@ -1,87 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import axios from 'axios';
-import { LogIn, Briefcase, Shield, User, GraduationCap, Loader2 } from 'lucide-react';
+import { LogIn, Briefcase, Shield, User, GraduationCap } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { toast } from 'sonner';
-import { AuthAPI } from '../lib/apis';
-import { getEmployees, getOrders, getWeeklyOrder } from '../lib/employeeData';
 import { useEmployee } from '../lib/employeeContext';
+import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 interface EmployeeLoginProps {
   onNavigate: (page: string) => void;
 }
 
 export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
-  const { setAllEmployees, setAllOrders, setAllWeeklyOrders } = useEmployee();
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [loading, setLoading] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
+  const { login } = useEmployee();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
-  // 🔁 Auto-login when token exists
-  useEffect(() => {
-    const tryAutoLogin = async () => {
-      try {
-        setLoading(true);
-        const auto = await AuthAPI.autoLogin();
-        if (auto) {
-          const stored = localStorage.getItem('user');
-          if (stored) {
-            const user = JSON.parse(stored);
-            toast.success(`Connexion automatique réussie. Bienvenue ${user.nom} !`);
-            await handleRedirectByRole(user);
-          }
-        }
-      } catch (error) {
-        console.warn('Auto-login failed:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    tryAutoLogin();
-  }, []);
-
-  // 🧭 Redirect based on role
-  const handleRedirectByRole = async (user: any) => {
-    switch (user.id_role) {
-      case 2: // Gérant
-        onNavigate('gerant-dashboard');
-        try {
-          setLoadingData(true);
-          const [employees, orders, weeklyOrders] = await Promise.all([
-            getEmployees(),
-            getOrders(),
-            getWeeklyOrder(),
-          ]);
-          if (Array.isArray(employees)) setAllEmployees(employees);
-          if (Array.isArray(orders)) setAllOrders(orders);
-          if (Array.isArray(weeklyOrders)) setAllWeeklyOrders(weeklyOrders);
-        } catch (err) {
-          console.error(err);
-          toast.error('Erreur lors du chargement des données.');
-        } finally {
-          setLoadingData(false);
-        }
-        break;
-
-      case 3:
-        onNavigate('employee-dashboard');
-        break;
-
-      case 4:
-        onNavigate('admin-dashboard');
-        break;
-
-      default:
-        onNavigate('home');
-    }
-  };
-
-  // 🔐 Manual login
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -89,28 +27,31 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
       return;
     }
 
-    try {
-      setLoading(true);
-      const data = await AuthAPI.login({
-        email: formData.email,
-        mot_de_passe: formData.password,
-      });
+    const success = login(formData.email, formData.password);
 
-      if (!data.success) {
-        toast.error(data.message || 'Email ou mot de passe incorrect');
-        return;
+    if (success) {
+      // Get the logged in employee to determine their role
+      const storedEmployee = localStorage.getItem('employee');
+      if (storedEmployee) {
+        const employee = JSON.parse(storedEmployee);
+        toast.success(`Bienvenue ${employee.name} !`);
+        
+        // Redirect based on role
+        switch (employee.role) {
+          case 'admin':
+            onNavigate('admin-dashboard');
+            break;
+          case 'gerant':
+            onNavigate('gerant-dashboard');
+            break;
+          case 'employe':
+          default:
+            onNavigate('employee-dashboard');
+            break;
+        }
       }
-
-      localStorage.setItem('user', JSON.stringify({ ...data.user, token: data.access_token }));
-      localStorage.setItem('token', data.access_token);
-
-      toast.success(`Bienvenue ${data.user.nom} !`);
-      await handleRedirectByRole(data.user);
-    } catch (error: any) {
-      console.error(error.response || error);
-      toast.error(error.response?.data?.message || 'Erreur lors de la connexion');
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error('Email ou mot de passe incorrect');
     }
   };
 
@@ -122,29 +63,62 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative">
-      {/* 🌀 Loading overlay for data */}
-      {loadingData && (
-        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center z-50">
-          <Loader2 className="animate-spin text-white size-10 mb-3" />
-          <p className="text-white text-lg font-medium">Chargement des données...</p>
-        </div>
-      )}
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
+        <div className="text-center mb-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', delay: 0.1 }}
+            className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4"
+          >
+            <Briefcase className="size-8 text-primary" />
+          </motion.div>
+          <h1 className="text-3xl mb-2 text-foreground">
+            Espace <span className="text-primary">Employé</span>
+          </h1>
+          <p className="text-muted-foreground">
+            Connectez-vous pour accéder à votre interface de gestion
+          </p>
+        </div>
+
+        {/* Role Icons */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex justify-center gap-4 mb-8"
+        >
+          {roleIcons.map((role, index) => {
+            const Icon = role.icon;
+            return (
+              <motion.div
+                key={role.label}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+                className="flex flex-col items-center gap-1"
+              >
+                <div className="p-2 rounded-xl bg-secondary border border-border">
+                  <Icon className={`size-5 ${role.color}`} />
+                </div>
+                <span className="text-xs text-muted-foreground">{role.label}</span>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
           onSubmit={handleSubmit}
           className="bg-card border border-border rounded-2xl p-8 space-y-6"
         >
-          <h2 className="text-center text-xl font-bold mb-4">Connexion Employé</h2>
-
           <div className="space-y-2">
             <Label htmlFor="email">Email professionnel</Label>
             <Input
@@ -153,7 +127,7 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="employe@restaurant.com"
-              disabled={loading || loadingData}
+              className="rounded-2xl bg-input-background border-input"
             />
           </div>
 
@@ -165,25 +139,33 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               placeholder="••••••••"
-              disabled={loading || loadingData}
+              className="rounded-2xl bg-input-background border-input"
             />
           </div>
 
           <Button
             type="submit"
             className="w-full rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground"
-            disabled={loading || loadingData}
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <Loader2 className="animate-spin mr-2 size-5" /> Connexion...
-              </span>
-            ) : (
-              <>
-                <LogIn className="size-5 mr-2" /> Se connecter
-              </>
-            )}
+            <LogIn className="size-5 mr-2" />
+            Se connecter
           </Button>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 p-4 rounded-xl bg-secondary border border-border">
+            <p className="text-xs text-muted-foreground mb-2">Comptes de démonstration :</p>
+            <div className="space-y-1 text-xs">
+              <p className="text-foreground">
+                <span className="text-red-500">Admin:</span> admin@restaurant.com / admin123
+              </p>
+              <p className="text-foreground">
+                <span className="text-blue-500">Gérant:</span> gerant@restaurant.com / gerant123
+              </p>
+              <p className="text-foreground">
+                <span className="text-green-500">Employé:</span> employe@restaurant.com / employe123
+              </p>
+            </div>
+          </div>
         </motion.form>
 
         <motion.div
@@ -192,12 +174,9 @@ export function EmployeeLogin({ onNavigate }: EmployeeLoginProps) {
           transition={{ delay: 0.6 }}
           className="text-center mt-6"
         >
-          <button
-            type="button"
-            onClick={() => onNavigate('home')}
-            className="text-sm text-primary hover:underline"
-          >
-            Retour au site principal
+          <button    type="button"  className="text-sm text-primary hover:underline">
+            <Link to='/'>Retour au site principal</Link>
+
           </button>
         </motion.div>
       </motion.div>

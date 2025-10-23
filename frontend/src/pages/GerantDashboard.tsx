@@ -15,9 +15,9 @@ export function GerantDashboard({ onNavigate }: GerantDashboardProps) {
 
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-  const pendingOrders = orders.filter((order) => order.status === 'en attente').length;
-  const pendingReclamations = reclamations.filter((rec) => rec.status === 'en attente').length;
-  const activeEmployees = employees.filter((emp) => emp.id_role === 3).length;
+  const pendingOrders = orders.filter((order) => order.status === 'pending').length;
+  const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
+  const activeEmployees = employees.filter((emp) => emp.role === 'employe').length;
 
   const stats = [
     {
@@ -121,7 +121,7 @@ export function GerantDashboard({ onNavigate }: GerantDashboardProps) {
             Tableau de bord <span className="text-primary">Gérant</span>
           </h1>
           <p className="text-muted-foreground">
-            Bienvenue {employee?.nom}, supervisez les opérations du restaurant
+            Bienvenue {employee?.name}, supervisez les opérations du restaurant
           </p>
         </motion.div>
 
