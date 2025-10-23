@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RoleMiddleware
 {
@@ -20,7 +19,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $user = JWTAuth::parseToken()->authenticate(); // Retrieves the authenticated user from JWT or session
+        $user = Auth::user(); // Retrieves the authenticated user from JWT or session
 
         // Case 1: No user logged in
         if (!$user) {
@@ -28,10 +27,10 @@ class RoleMiddleware
         }
 
         // Case 2: No matching role
-$userRole = (string) $user->id_role;
-if (!in_array($userRole, $roles)) {
-    return response()->json(['message' => 'Unauthorized - Insufficient permissions'], 403);
-} // safer (avoid null errors)
+        $userRole = optional($user->role)->nom_role; // safer (avoid null errors)
+        if (!$userRole || !in_array($userRole, $roles)) {
+            return response()->json(['message' => 'Unauthorized - Insufficient permissions'], 403);
+        }
 
         return $next($request);
     }

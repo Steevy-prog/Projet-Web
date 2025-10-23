@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\OAuthController;
 use Illuminate\Session\Middleware\StartSession;
+=======
+>>>>>>> parent of a5a5a5d8 (...Feat OAuth 2.0 for google ig and facebook auth)
 
 Route::get('/', function () {
     return view('welcome');

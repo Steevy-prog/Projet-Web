@@ -10,8 +10,11 @@
         "darkaonline/l5-swagger": "^9.0",
         "guzzlehttp/guzzle": "^7.0",
         "laravel/framework": "^12.0",
+<<<<<<< HEAD
         "laravel/sanctum": "^4.2",
         "laravel/socialite": "^5.23",
+=======
+>>>>>>> parent of a5a5a5d8 (...Feat OAuth 2.0 for google ig and facebook auth)
         "laravel/tinker": "^2.10.1",
         "tymon/jwt-auth": "^2.2"
     },

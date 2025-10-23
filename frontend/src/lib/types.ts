@@ -1,16 +1,7 @@
-export interface Utilisateur {
-  id_utilisateur: string;
-  nom: string;
-  prenom: string;
+export interface User {
+  id: string;
+  name: string;
   email: string;
-  mot_de_passe: string;
-  telephone: string;
-  localisation?: string;
-  id_role: number;
-  id_parrain?: number;
-  date_creation: string;
-  derniere_connexion: string;
-  date_modification: string;
   loyaltyPoints: number;
   gamesPlayed: number;
   ordersCount: number;
@@ -78,20 +69,13 @@ export interface LeaderboardEntry {
   gamesPlayed: number;
 }
 
-
-export interface Employee extends Utilisateur{
-  id_employe: number;
-  poste: string;
-  date_embauche: string;
-  salaire: number;
-  est_actif: boolean;
-  date_creation: string;
+export interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'gerant' | 'employe' | 'etudiant';
 }
-
-export interface realemployee {
-
-}
-
 
 export interface OrderWithDetails extends Order {
   userName: string;

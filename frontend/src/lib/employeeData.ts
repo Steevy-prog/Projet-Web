@@ -1,59 +1,36 @@
 import { Employee, OrderWithDetails, Reclamation, MenuItem, Promotion, AppSettings } from './types';
-import {fetchEmployees, fetchOrders} from './api';
-
-export async function getEmployees(): Promise<Employee[]> {
-  try {
-    const data = await fetchEmployees();
-    return data as Employee[];
-  } catch (error) {
-    console.error("Failed to load employees:", error);
-    return [];
-  }
-}
-
-export async function getOrders(): Promise<Employee[]> {
-  try {
-    const data = await fetchOrders();
-    return data as Employee[];
-  } catch (error) {
-    console.error("Failed to load Orders:", error);
-    return [];
-  }
-}
-
-export async function getReclamation(): Promise<Employee[]> {
-  try {
-    const data = await fetchOrders();
-    return data as Employee[];
-  } catch (error) {
-    console.error("Failed to load recalmations:", error);
-    return [];
-  }
-}
-
-export async function getMenuItems(): Promise<Employee[]> {
-  try {
-    const data = await fetchOrders();
-    return data as Employee[];
-  } catch (error) {
-    console.error("Failed to load Menu Items:", error);
-    return [];
-  }
-}
-
-export async function getPromotions(): Promise<Employee[]> {
-  try {
-    const data = await fetchOrders();
-    return data as Employee[];
-  } catch (error) {
-    console.error("Failed to load Promotions:", error);
-    return [];
-  }
-}
-
 
 // Mock employee accounts
-
+export const employees: Employee[] = [
+  {
+    id: 'emp1',
+    name: 'Admin Principal',
+    email: 'admin@restaurant.com',
+    password: 'admin123',
+    role: 'admin',
+  },
+  {
+    id: 'emp2',
+    name: 'Marie Gérant',
+    email: 'gerant@restaurant.com',
+    password: 'gerant123',
+    role: 'gerant',
+  },
+  {
+    id: 'emp3',
+    name: 'Pierre Employé',
+    email: 'employe@restaurant.com',
+    password: 'employe123',
+    role: 'employe',
+  },
+  {
+    id: 'emp4',
+    name: 'Sophie Employé',
+    email: 'sophie@restaurant.com',
+    password: 'employe123',
+    role: 'employe',
+  },
+];
 
 // Mock orders with details
 export const mockOrders: OrderWithDetails[] = [

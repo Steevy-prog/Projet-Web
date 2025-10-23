@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Utilisateur extends Authenticatable implements JWTSubject
+class Utilisateur extends Model implements JWTSubject
 {
     protected $table = 'utilisateur';
     protected $primaryKey = 'id_utilisateur';
     public $timestamps = false;
-    protected $hidden = ['mot_de_passe'];
 
     protected $fillable = [
         'nom', 'prenom', 'email', 'mot_de_passe', 'telephone',
@@ -48,6 +46,12 @@ class Utilisateur extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    // Mutator to automatically hash passwords
+    public function setMotDePasseAttribute($value)
+    {
+        $this->attributes['mot_de_passe'] = bcrypt($value);
     }
 
     // Tell Laravel the custom password column name
