@@ -7,17 +7,17 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { toast } from 'sonner';
-import { Employee } from '../lib/types';
+import { Employee ,Utilisateur} from '../lib/types';
 
 export function GerantEmployees() {
   const { employees, addEmployee, updateEmployee, deleteEmployee } = useEmployee();
   const [isAdding, setIsAdding] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'employe' as Employee['role'],
+    role: 3 as Utilisateur['id_role'], // Replace 3 with the correct numeric value for 'employe'
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,45 +33,42 @@ export function GerantEmployees() {
       toast.success('Employé modifié avec succès');
       setEditingId(null);
     } else {
-      const newEmployee: Employee = {
-        id: `emp${Date.now()}`,
-        ...formData,
-      };
+      const newEmployee: Employee = { ...(formData as unknown as Employee) };
       addEmployee(newEmployee);
       toast.success('Employé ajouté avec succès');
       setIsAdding(false);
     }
 
-    setFormData({ name: '', email: '', password: '', role: 'employe' });
+    setFormData({ name: '', email: '', password: '', role: 2 });
   };
 
   const handleEdit = (employee: Employee) => {
-    setEditingId(employee.id);
+    setEditingId(employee.id_employe);
     setFormData({
-      name: employee.name,
+      name: employee.nom,
       email: employee.email,
-      password: employee.password,
-      role: employee.role,
+      password: employee.mot_de_passe,
+      role: employee.id_role,
     });
     setIsAdding(true);
   };
 
-  const handleDelete = (employeeId: string, employeeName: string) => {
+  const handleDelete = (employeeId: number, employeeName: string) => {
     if (window.confirm(`Êtes-vous sûr de vouloir supprimer ${employeeName} ?`)) {
       deleteEmployee(employeeId);
       toast.success('Employé supprimé');
     }
   };
 
-  const getRoleIcon = (role: string) => {
+  const getRoleIcon = (role: number) => {
     switch (role) {
-      case 'admin':
+      case 1:
         return Shield;
-      case 'gerant':
+      case 2 :
         return Users;
-      case 'employe':
+      case 3:
         return User;
-      case 'etudiant':
+      case 4:
         return GraduationCap;
       default:
         return User;
@@ -93,16 +90,16 @@ export function GerantEmployees() {
     }
   };
 
-  const getRoleLabel = (role: string) => {
+  const getRoleLabel = (role: number) => {
     switch (role) {
-      case 'admin':
-        return 'Administrateur';
-      case 'gerant':
+      case 1:
+        return 'Etudiant';
+      case 2:
         return 'Gérant';
-      case 'employe':
+      case 3:
         return 'Employé';
-      case 'etudiant':
-        return 'Étudiant';
+      case 4:
+        return 'Administrateur';
       default:
         return role;
     }
@@ -110,9 +107,9 @@ export function GerantEmployees() {
 
   const employeeStats = {
     total: employees.length,
-    employes: employees.filter((e) => e.role === 'employe').length,
-    gerants: employees.filter((e) => e.role === 'gerant').length,
-    admins: employees.filter((e) => e.role === 'admin').length,
+    employes: employees.filter((e) => e.id_role === 3).length,
+    gerants: employees.filter((e) => e.id_role === 2).length,
+    admins: employees.filter((e) => e.id_role === 1).length,
   };
 
   return (
@@ -136,7 +133,7 @@ export function GerantEmployees() {
               onClick={() => {
                 setIsAdding(!isAdding);
                 setEditingId(null);
-                setFormData({ name: '', email: '', password: '', role: 'employe' });
+                setFormData({ name: '', email: '', password: '', role: 2 });
               }}
               className="rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground"
             >
@@ -246,7 +243,7 @@ export function GerantEmployees() {
                   <Label htmlFor="role">Rôle</Label>
                   <Select
                     value={formData.role}
-                    onValueChange={(value: Employee['role']) => setFormData({ ...formData, role: value })}
+                    onValueChange={(value: Employee['id_role']) => setFormData({ ...formData, role: value })}
                   >
                     <SelectTrigger className="rounded-2xl bg-input-background border-input">
                       <SelectValue />
@@ -273,7 +270,7 @@ export function GerantEmployees() {
                   onClick={() => {
                     setIsAdding(false);
                     setEditingId(null);
-                    setFormData({ name: '', email: '', password: '', role: 'employe' });
+                    setFormData({ name: '', email: '', password: '', role: 3 });
                   }}
                   className="rounded-2xl"
                 >
@@ -287,10 +284,10 @@ export function GerantEmployees() {
         {/* Employees List */}
         <div className="grid grid-cols-1 gap-4">
           {employees.map((employee, index) => {
-            const RoleIcon = getRoleIcon(employee.role);
+            const RoleIcon = getRoleIcon(employee.id_role);
             return (
               <motion.div
-                key={employee.id}
+                key={employee.id_employe}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + index * 0.05 }}
@@ -302,10 +299,10 @@ export function GerantEmployees() {
                       <RoleIcon className="size-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-foreground mb-1">{employee.name}</h3>
+                      <h3 className="text-lg text-foreground mb-1">{employee.nom}</h3>
                       <p className="text-sm text-muted-foreground mb-2">{employee.email}</p>
-                      <span className={`px-3 py-1 rounded-full text-xs ${getRoleColor(employee.role)}`}>
-                        {getRoleLabel(employee.role)}
+                      <span className={`px-3 py-1 rounded-full text-xs ${getRoleColor(employee.id_role  == 4 ? 'admin' : employee.id_role === 2 ? 'gerant' : employee.id_role === 3 ? 'employe' : 'etudiant'  )}`}>
+                        {getRoleLabel(employee.id_role)}
                       </span>
                     </div>
                   </div>
@@ -320,9 +317,9 @@ export function GerantEmployees() {
                       <Edit className="size-4 mr-2" />
                       Modifier
                     </Button>
-                    {employee.role !== 'admin' && (
+                    {employee.id_role !== 4 && (
                       <Button
-                        onClick={() => handleDelete(employee.id, employee.name)}
+                        onClick={() => handleDelete(employee.id_employe, employee.nom)}
                         variant="outline"
                         size="sm"
                         className="rounded-xl text-destructive hover:bg-destructive/20"
