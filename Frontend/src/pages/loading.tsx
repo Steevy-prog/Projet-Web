@@ -1,8 +1,27 @@
 // Loading.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import Waves from '../components/Waves';
 
 const Loading = () => {
+  // Optionnel : tu peux ajouter une animation de fade-out après 2s
+  // mais ce n'est pas obligatoire, le parent gère le timing
+
+  // Ajout des keyframes globales pour le spinner si ce n'est pas déjà fait
+  useEffect(() => {
+    const styleEl = document.createElement('style');
+    styleEl.innerHTML = `
+      @keyframes loading-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
       <Waves
@@ -63,10 +82,3 @@ const styles: any = {
 };
 
 export default Loading;
-
-// Add keyframes globally if not already present in project CSS
-const styleEl = document.createElement('style');
-styleEl.innerHTML = `
-@keyframes loading-spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-`;
-document.head.appendChild(styleEl);

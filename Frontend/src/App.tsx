@@ -60,7 +60,7 @@ function AppContent() {
 
   React.useEffect(() => {
     setIsLoading(true);
-    const timer = setTimeout(() => setIsLoading(false), 2000); // Simule un chargement de 2 secondes
+    const timer = setTimeout(() => setIsLoading(false), 1000); // Simule un chargement de 2 secondes
     return () => clearTimeout(timer);
   }, [pathname]);
 
