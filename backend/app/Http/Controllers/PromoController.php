@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Promotion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /**
  *
- *@OA\Tag(
+ * @OA\Tag(
  *     name="Promotions",
  *     description="API Endpoints for Promotions Management"
  * )
@@ -31,7 +32,6 @@ use Illuminate\Http\Request;
  *     @OA\Property(property="date_creation", type="string", format="date-time", example="2025-10-20T12:00:00Z")
  * )
  */
-
 class PromoController extends Controller
 {
     /**
@@ -43,10 +43,7 @@ class PromoController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful response",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Promotion")
-     *         )
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Promotion"))
      *     ),
      *     @OA\Response(response=404, description="No promotion found")
      * )
@@ -54,54 +51,152 @@ class PromoController extends Controller
     public function index()
     {
         $promotions = Promotion::all();
-        return response()->json($promotions);
+
+        if ($promotions->isEmpty()) {
+            return response()->json(['message' => 'No promotions found'], 404);
+        }
+
+        return response()->json($promotions, 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/promotions",
+     *     summary="Create a new promotion",
+     *     tags={"Promotions"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Promotion")
+     *     ),
+     *     @OA\Response(response=201, description="Promotion created successfully"),
+     *     @OA\Response(response=400, description="Validation error")
+     * )
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'titre' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'reduction' => 'nullable|numeric|min:0',
+            'montant_reduction' => 'nullable|numeric|min:0',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date|after:date_debut',
+            'image_url' => 'nullable|string',
+            'active' => 'boolean',
+            'code_promo' => 'nullable|string|max:50|unique:promotions,code_promo',
+            'limite_utilisations' => 'nullable|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $promotion = Promotion::create($validator->validated());
+
+        return response()->json(['message' => 'Promotion created successfully', 'promotion' => $promotion], 201);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/promotions/{id}",
+     *     summary="Get a specific promotion",
+     *     tags={"Promotions"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Promotion ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Promotion found"),
+     *     @OA\Response(response=404, description="Promotion not found")
+     * )
      */
     public function show(string $id)
     {
-        //
+        $promotion = Promotion::find($id);
+
+        if (!$promotion) {
+            return response()->json(['message' => 'Promotion not found'], 404);
+        }
+
+        return response()->json($promotion, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/promotions/{id}",
+     *     summary="Update an existing promotion",
+     *     tags={"Promotions"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Promotion ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Promotion")),
+     *     @OA\Response(response=200, description="Promotion updated successfully"),
+     *     @OA\Response(response=404, description="Promotion not found"),
+     *     @OA\Response(response=400, description="Validation error")
+     * )
      */
     public function update(Request $request, string $id)
     {
-        //
+        $promotion = Promotion::find($id);
+
+        if (!$promotion) {
+            return response()->json(['message' => 'Promotion not found'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'titre' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+            'reduction' => 'nullable|numeric|min:0',
+            'montant_reduction' => 'nullable|numeric|min:0',
+            'date_debut' => 'nullable|date',
+            'date_fin' => 'nullable|date|after:date_debut',
+            'image_url' => 'nullable|string',
+            'active' => 'boolean',
+            'code_promo' => 'nullable|string|max:50|unique:promotions,code_promo,' . $promotion->id_promotion . ',id_promotion',
+            'limite_utilisations' => 'nullable|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $promotion->update($validator->validated());
+
+        return response()->json(['message' => 'Promotion updated successfully', 'promotion' => $promotion], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/promotions/{id}",
+     *     summary="Delete a promotion",
+     *     tags={"Promotions"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Promotion ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Promotion deleted successfully"),
+     *     @OA\Response(response=404, description="Promotion not found")
+     * )
      */
     public function destroy(string $id)
     {
-        //
+        $promotion = Promotion::find($id);
+
+        if (!$promotion) {
+            return response()->json(['message' => 'Promotion not found'], 404);
+        }
+
+        $promotion->delete();
+
+        return response()->json(['message' => 'Promotion deleted successfully'], 200);
     }
 }

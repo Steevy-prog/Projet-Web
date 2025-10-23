@@ -45,7 +45,7 @@ class EmployeController extends Controller
      */
     public function index()
     {
-        $employees = Employe::all();
+        $employees = Employe::with('utilisateur')->get()->makeHidden('id_utilisateur');
         if ($employees->isEmpty()) {
             return response()->json(['message' => 'No employees found'], 404);
         }
@@ -118,7 +118,7 @@ class EmployeController extends Controller
      */
     public function show($id)
     {
-        $employe = Employe::find($id);
+        $employe = Employe::with('utilisateur')->find($id)->makeHidden('id_utilisateur');
         if ($employe) {
             return response()->json($employe);
         }

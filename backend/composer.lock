@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
     "content-hash": "f0548538b769dc1775299e6a9ed36fc8",
-=======
-    "content-hash": "7f415399c75423bd6d25aa67b98ea8c8",
->>>>>>> parent of a5a5a5d8 (...Feat OAuth 2.0 for google ig and facebook auth)
     "packages": [
         {
             "name": "brick/math",

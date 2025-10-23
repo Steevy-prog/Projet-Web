@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commande;
 use Illuminate\Http\Request;
 
 
@@ -49,7 +50,11 @@ class CommandeController extends Controller
      */
     public function index()
     {
-        //
+        $commandes = Commande::with('utilissateur')->get()->makeHidden('id_utilisateur');
+        if($commandes->isEmpty()){
+            return response()->json(['message' => 'No ordersfound'], 404);
+        }
+               return response()->json($commandes);
     }
 
     /**
@@ -65,7 +70,23 @@ class CommandeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_utilisateur' => 'required|integer|exists:utilisateur,id_utilisateur',
+            'date_commande' => 'required|date',
+            'montant_total' => 'required|integer',
+            'points_gagné' => 'required|integer',
+            'type_service' => 'required|string',
+            'heure_arrivee' => 'required|string',
+            'statut' => 'required|string',
+            'numero_commande' => 'required|',
+        ]);
+
+        $commande = Commande::create($validated);
+
+        return response()->json([
+            'message' => 'commande créé avec succès',
+            'data' => $commande
+        ], 201);
     }
 
     /**

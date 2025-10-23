@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Controllers\MessageController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
@@ -37,18 +38,32 @@ Route::middleware(['auth.jwt'])->group(function () {
 
     // Routes restricted to specific roles
     Route::middleware(['role:1'])->group(function () {
-        // Admin routes
+        // Etudiant routes
         Route::apiResource('utilisateurs', UtilisateurController::class);
-        Route::apiResource('employes', EmployeController::class);
     });
 
     Route::middleware(['role:2'])->group(function () {
         // Gerant routes
+        Route::apiResource('employes', EmployeController::class);
         Route::apiResource('commandes', CommandeController::class);
+        Route::get('messages/{userId}', [MessageController::class, 'getConversation']);
+        Route::post('messages', [MessageController::class, 'store']);
+        Route::get('users', [MessageController::class, 'getUsers']);;
     });
 
     Route::middleware(['role:3'])->group(function () {
         // Employee routes
         Route::apiResource('reclamations', ReclamController::class);
+        Route::get('messages/{userId}', [MessageController::class, 'getConversation']);
+        Route::post('messages', [MessageController::class, 'store']);
+        Route::get('users', [MessageController::class, 'getUsers']);;
     });
+
+    Route::middleware(['role:4'])->group(function () {
+        // Admin routes
+        Route::get('messages/{userId}', [MessageController::class, 'getConversation']);
+        Route::post('messages', [MessageController::class, 'store']);
+        Route::get('users', [MessageController::class, 'getUsers']);;
+    });
+
 });

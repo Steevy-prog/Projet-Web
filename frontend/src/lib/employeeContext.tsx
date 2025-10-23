@@ -1,10 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Employee, OrderWithDetails, Reclamation, Promotion, AppSettings } from './types';
-import { employees, mockOrders, mockReclamations, menuItemsStatus, MenuItemStatus, mockPromotions, appSettings } from './employeeData';
+import {
+  mockOrders,
+  mockReclamations,
+  menuItemsStatus,
+  MenuItemStatus,
+  mockPromotions,
+  appSettings,
+} from './employeeData';
 
 interface EmployeeContextType {
   employee: Employee | null;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   orders: OrderWithDetails[];
   updateOrderStatus: (orderId: string, status: OrderWithDetails['status']) => void;
@@ -17,147 +24,162 @@ interface EmployeeContextType {
   updateMenuItem: (itemId: string, updates: Partial<MenuItemStatus>) => void;
   deleteMenuItem: (itemId: string) => void;
   employees: Employee[];
-  addEmployee: (employee: Employee) => void;
-  updateEmployee: (employeeId: string, updates: Partial<Employee>) => void;
-  deleteEmployee: (employeeId: string) => void;
+  fetchAllEmployees: () => Promise<void>;
+  addEmployee: (employee: Employee) => Promise<void>;
+  updateEmployee: (employeeId: number, updates: Partial<Employee>) => Promise<void>;
+  deleteEmployee: (employeeId: number) => Promise<void>;
   promotions: Promotion[];
   addPromotion: (promotion: Promotion) => void;
   updatePromotion: (promotionId: string, updates: Partial<Promotion>) => void;
   deletePromotion: (promotionId: string) => void;
   settings: AppSettings;
   updateSettings: (updates: Partial<AppSettings>) => void;
+  setAllEmployees: (employees: Employee[]) => void;
+  setAllOrders: (orders: OrderWithDetails[]) => void;
 }
 
 const EmployeeContext = createContext<EmployeeContextType | undefined>(undefined);
 
+const API_URL = 'http://localhost:8000/api';
+
 export function EmployeeProvider({ children }: { children: ReactNode }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
-  const [orders, setOrders] = useState<OrderWithDetails[]>(mockOrders);
+  const [orders, setOrders] = useState<OrderWithDetails[]>([]);
   const [reclamations, setReclamations] = useState<Reclamation[]>(mockReclamations);
   const [menuItems, setMenuItems] = useState<MenuItemStatus[]>(menuItemsStatus);
-  const [employeesList, setEmployeesList] = useState<Employee[]>(employees);
+  const [employeesList, setEmployeesList] = useState<Employee[]>([]);
   const [promotions, setPromotions] = useState<Promotion[]>(mockPromotions);
   const [settings, setSettings] = useState<AppSettings>(appSettings);
 
   // Load employee from localStorage on mount
   useEffect(() => {
     const storedEmployee = localStorage.getItem('employee');
-    if (storedEmployee) {
-      try {
-        setEmployee(JSON.parse(storedEmployee));
-      } catch (error) {
-        console.error('Failed to parse stored employee:', error);
-        localStorage.removeItem('employee');
-      }
-    }
+    if (storedEmployee) setEmployee(JSON.parse(storedEmployee));
   }, []);
 
-  const login = (email: string, password: string): boolean => {
-    const foundEmployee = employees.find(
-      (emp) => emp.email === email && emp.password === password
-    );
-
-    if (foundEmployee) {
-      setEmployee(foundEmployee);
-      localStorage.setItem('employee', JSON.stringify(foundEmployee));
+  // --- LOGIN ---
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) throw new Error('Invalid credentials');
+      const data = await res.json();
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('employee', JSON.stringify(data.user));
+      setEmployee(data.user);
+      await fetchAllEmployees(); // load all employees after login
       return true;
+    } catch (err) {
+      console.error('Login failed:', err);
+      return false;
     }
-    return false;
   };
 
+  // --- LOGOUT ---
   const logout = () => {
-    setEmployee(null);
+    localStorage.removeItem('token');
     localStorage.removeItem('employee');
+    setEmployee(null);
+    setEmployeesList([]);
   };
 
+  // --- EMPLOYEES API ---
+  const fetchAllEmployees = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_URL}/employes`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error('Failed to fetch employees');
+      const data = await res.json();
+      setEmployeesList(data);
+    } catch (err) {
+      console.error('Error fetching employees:', err);
+    }
+  };
+
+  const addEmployee = async (newEmployee: Employee) => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_URL}/employes`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(newEmployee),
+      });
+      if (!res.ok) throw new Error('Failed to add employee');
+      const created = await res.json();
+      setEmployeesList((prev) => [...prev, created]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const updateEmployee = async (employeeId: number, updates: Partial<Employee>) => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_URL}/employes/${employeeId}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) throw new Error('Failed to update employee');
+      const updated = await res.json();
+      setEmployeesList((prev) =>
+        prev.map((emp) => (emp.id_employe === employeeId ? updated : emp))
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const setAllEmployees = (employees: Employee[]) => {
+  setEmployeesList(employees);
+  };
+  const setAllOrders = (orders: OrderWithDetails[]) => {
+  setOrders(orders);
+  };
+  const deleteEmployee = async (employeeId: number) => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_URL}/employes/${employeeId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      });
+      if (!res.ok) throw new Error('Failed to delete employee');
+      setEmployeesList((prev) => prev.filter((emp) => emp.id_employe !== employeeId));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // --- OTHER STATE UPDATES ---
   const updateOrderStatus = (orderId: string, status: OrderWithDetails['status']) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status } : order
-      )
-    );
+    setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
   };
-
   const updateReclamationStatus = (reclamationId: string, status: Reclamation['status']) => {
-    setReclamations((prevReclamations) =>
-      prevReclamations.map((rec) =>
-        rec.id === reclamationId ? { ...rec, status } : rec
-      )
-    );
+    setReclamations((prev) => prev.map((r) => (r.id === reclamationId ? { ...r, status } : r)));
   };
-
   const toggleMenuItemAvailability = (itemId: string) => {
-    setMenuItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, available: !item.available } : item
-      )
-    );
+    setMenuItems((prev) => prev.map((i) => (i.id === itemId ? { ...i, available: !i.available } : i)));
   };
-
   const setDishOfDay = (itemId: string) => {
-    setMenuItems((prevItems) =>
-      prevItems.map((item) => ({
-        ...item,
-        isDishOfDay: item.id === itemId,
-      }))
-    );
+    setMenuItems((prev) => prev.map((i) => ({ ...i, isDishOfDay: i.id === itemId })));
   };
-
-  const addMenuItem = (item: MenuItemStatus) => {
-    setMenuItems((prevItems) => [...prevItems, item]);
-  };
-
+  const addMenuItem = (item: MenuItemStatus) => setMenuItems((prev) => [...prev, item]);
   const updateMenuItem = (itemId: string, updates: Partial<MenuItemStatus>) => {
-    setMenuItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, ...updates } : item
-      )
-    );
+    setMenuItems((prev) => prev.map((i) => (i.id === itemId ? { ...i, ...updates } : i)));
   };
-
-  const deleteMenuItem = (itemId: string) => {
-    setMenuItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
-
-  const addEmployee = (newEmployee: Employee) => {
-    setEmployeesList((prevEmployees) => [...prevEmployees, newEmployee]);
-  };
-
-  const updateEmployee = (employeeId: string, updates: Partial<Employee>) => {
-    setEmployeesList((prevEmployees) =>
-      prevEmployees.map((emp) =>
-        emp.id === employeeId ? { ...emp, ...updates } : emp
-      )
-    );
-  };
-
-  const deleteEmployee = (employeeId: string) => {
-    setEmployeesList((prevEmployees) =>
-      prevEmployees.filter((emp) => emp.id !== employeeId)
-    );
-  };
-
-  const addPromotion = (promotion: Promotion) => {
-    setPromotions((prevPromotions) => [...prevPromotions, promotion]);
-  };
-
+  const deleteMenuItem = (itemId: string) => setMenuItems((prev) => prev.filter((i) => i.id !== itemId));
+  const addPromotion = (promotion: Promotion) => setPromotions((prev) => [...prev, promotion]);
   const updatePromotion = (promotionId: string, updates: Partial<Promotion>) => {
-    setPromotions((prevPromotions) =>
-      prevPromotions.map((promo) =>
-        promo.id === promotionId ? { ...promo, ...updates } : promo
-      )
-    );
+    setPromotions((prev) => prev.map((p) => (p.id === promotionId ? { ...p, ...updates } : p)));
   };
-
   const deletePromotion = (promotionId: string) => {
-    setPromotions((prevPromotions) =>
-      prevPromotions.filter((promo) => promo.id !== promotionId)
-    );
+    setPromotions((prev) => prev.filter((p) => p.id !== promotionId));
   };
-
-  const updateSettings = (updates: Partial<AppSettings>) => {
-    setSettings((prevSettings) => ({ ...prevSettings, ...updates }));
-  };
+  const updateSettings = (updates: Partial<AppSettings>) => setSettings((prev) => ({ ...prev, ...updates }));
 
   return (
     <EmployeeContext.Provider
@@ -176,6 +198,7 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
         updateMenuItem,
         deleteMenuItem,
         employees: employeesList,
+        fetchAllEmployees,
         addEmployee,
         updateEmployee,
         deleteEmployee,
@@ -185,6 +208,8 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
         deletePromotion,
         settings,
         updateSettings,
+        setAllEmployees,
+        setAllOrders,
       }}
     >
       {children}
@@ -194,8 +219,6 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
 
 export function useEmployee() {
   const context = useContext(EmployeeContext);
-  if (context === undefined) {
-    throw new Error('useEmployee must be used within an EmployeeProvider');
-  }
+  if (!context) throw new Error('useEmployee must be used within an EmployeeProvider');
   return context;
 }
