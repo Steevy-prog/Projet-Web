@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { User, CartItem, MenuItem } from './types';
+import { Utilisateur as User, CartItem, MenuItem } from './types';
 
 interface AppContextType {
   user: User | null;

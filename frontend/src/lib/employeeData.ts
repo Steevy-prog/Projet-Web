@@ -1,5 +1,5 @@
 import { Employee, OrderWithDetails, Reclamation, MenuItem, Promotion, AppSettings } from './types';
-import {fetchEmployees, fetchOrders} from './api';
+import {fetchEmployees, fetchOrders, fetchWeeklyOrders} from './api';
 
 export async function getEmployees(): Promise<Employee[]> {
   try {
@@ -11,10 +11,10 @@ export async function getEmployees(): Promise<Employee[]> {
   }
 }
 
-export async function getOrders(): Promise<Employee[]> {
+export async function getOrders(): Promise<OrderWithDetails[]> {
   try {
     const data = await fetchOrders();
-    return data as Employee[];
+    return data as OrderWithDetails[];
   } catch (error) {
     console.error("Failed to load Orders:", error);
     return [];
@@ -51,199 +51,22 @@ export async function getPromotions(): Promise<Employee[]> {
   }
 }
 
+export async function getWeeklyOrder(): Promise<WeeklyStat[]> {
+  try {
+    const data = await fetchWeeklyOrders();
+    return data as WeeklyStat[];
+  } catch (error) {
+    console.error("Failed to load Promotions:", error);
+    return [];
+  }
+}
+
 
 // Mock employee accounts
 
 
-// Mock orders with details
-export const mockOrders: OrderWithDetails[] = [
-  {
-    id: 'ord1',
-    userId: 'u1',
-    userName: 'Sophie Martin',
-    userEmail: 'sophie.martin@email.com',
-    items: [
-      {
-        menuItem: {
-          id: '1',
-          name: 'Burger Signature',
-          description: 'Notre burger emblématique',
-          price: 12.99,
-          category: 'Burgers',
-          image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80',
-        },
-        quantity: 2,
-      },
-      {
-        menuItem: {
-          id: '3',
-          name: 'Salade César',
-          description: 'Laitue romaine, poulet grillé',
-          price: 8.99,
-          category: 'Salades',
-          image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800&q=80',
-        },
-        quantity: 1,
-      },
-    ],
-    total: 34.97,
-    status: 'pending',
-    createdAt: new Date('2024-10-14T08:30:00'),
-  },
-  {
-    id: 'ord2',
-    userId: 'u2',
-    userName: 'Thomas Dupont',
-    userEmail: 'thomas.dupont@email.com',
-    items: [
-      {
-        menuItem: {
-          id: '2',
-          name: 'Pizza Margherita',
-          description: 'Pizza classique',
-          price: 10.99,
-          category: 'Pizzas',
-          image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80',
-        },
-        quantity: 1,
-      },
-    ],
-    total: 10.99,
-    status: 'preparing',
-    createdAt: new Date('2024-10-14T09:15:00'),
-  },
-  {
-    id: 'ord3',
-    userId: 'u3',
-    userName: 'Marie Laurent',
-    userEmail: 'marie.laurent@email.com',
-    items: [
-      {
-        menuItem: {
-          id: '4',
-          name: 'Pâtes Carbonara',
-          description: 'Pâtes fraîches',
-          price: 11.49,
-          category: 'Pâtes',
-          image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&q=80',
-        },
-        quantity: 2,
-      },
-      {
-        menuItem: {
-          id: '8',
-          name: 'Poké Bowl',
-          description: 'Bol de riz, saumon',
-          price: 13.49,
-          category: 'Bowls',
-          image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80',
-        },
-        quantity: 1,
-      },
-    ],
-    total: 36.47,
-    status: 'ready',
-    createdAt: new Date('2024-10-14T10:00:00'),
-  },
-  {
-    id: 'ord4',
-    userId: 'u4',
-    userName: 'Lucas Bernard',
-    userEmail: 'lucas.bernard@email.com',
-    items: [
-      {
-        menuItem: {
-          id: '7',
-          name: 'Steak Frites',
-          description: 'Entrecôte grillée',
-          price: 18.99,
-          category: 'Viandes',
-          image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800&q=80',
-        },
-        quantity: 1,
-      },
-    ],
-    total: 18.99,
-    status: 'pending',
-    createdAt: new Date('2024-10-14T10:45:00'),
-  },
-  {
-    id: 'ord5',
-    userId: 'u5',
-    userName: 'Emma Petit',
-    userEmail: 'emma.petit@email.com',
-    items: [
-      {
-        menuItem: {
-          id: '6',
-          name: 'Sushi Mix',
-          description: 'Assortiment de 12 pièces',
-          price: 15.99,
-          category: 'Sushi',
-          image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800&q=80',
-        },
-        quantity: 1,
-      },
-    ],
-    total: 15.99,
-    status: 'delivered',
-    createdAt: new Date('2024-10-13T18:20:00'),
-  },
-];
 
 // Mock reclamations for employees
-export const mockReclamations: Reclamation[] = [
-  {
-    id: 'rec1',
-    userId: 'u1',
-    name: 'Sophie Martin',
-    email: 'sophie.martin@email.com',
-    type: 'food',
-    message: 'Le burger était froid à la livraison. Déçue de la qualité cette fois-ci.',
-    status: 'pending',
-    createdAt: new Date('2024-10-13T14:30:00'),
-  },
-  {
-    id: 'rec2',
-    userId: 'u2',
-    name: 'Thomas Dupont',
-    email: 'thomas.dupont@email.com',
-    type: 'delivery',
-    message: 'Livraison en retard de 45 minutes. Aucune communication du livreur.',
-    status: 'reviewed',
-    createdAt: new Date('2024-10-12T19:15:00'),
-  },
-  {
-    id: 'rec3',
-    userId: 'u3',
-    name: 'Marie Laurent',
-    email: 'marie.laurent@email.com',
-    type: 'service',
-    message: 'Personnel très aimable mais temps d\'attente trop long au restaurant.',
-    status: 'pending',
-    createdAt: new Date('2024-10-14T11:00:00'),
-  },
-  {
-    id: 'rec4',
-    name: 'Client Anonyme',
-    email: 'anonyme@email.com',
-    type: 'other',
-    message: 'Problème avec l\'application mobile, impossible de finaliser ma commande.',
-    status: 'resolved',
-    createdAt: new Date('2024-10-11T16:45:00'),
-  },
-  {
-    id: 'rec5',
-    userId: 'u4',
-    name: 'Lucas Bernard',
-    email: 'lucas.bernard@email.com',
-    type: 'food',
-    message: 'Portions trop petites pour le prix. Rapport qualité-prix décevant.',
-    status: 'reviewed',
-    createdAt: new Date('2024-10-13T20:30:00'),
-  },
-];
-
 // Weekly statistics data
 export interface WeeklyStat {
   day: string;

@@ -28,7 +28,7 @@ export function GerantHeader({ currentPage, onNavigate }: GerantHeaderProps) {
 
   const pendingOrders = orders.filter((order) => order.status === 'pending').length;
   const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
-  const unreadMessagesCount = employee ? getUnreadCount(employee.id, 'employee') : 0;
+  const unreadMessagesCount = employee ? getUnreadCount(String(employee.id_employe), 'employee') : 0;
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', page: 'gerant-dashboard' },
@@ -65,10 +65,10 @@ export function GerantHeader({ currentPage, onNavigate }: GerantHeaderProps) {
               className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary border border-border"
             >
               <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-sm text-primary">{employee.name.charAt(0)}</span>
+                <span className="text-sm text-primary">{employee.nom.charAt(0)}</span>
               </div>
               <div className="text-left">
-                <p className="text-sm">{employee.name}</p>
+                <p className="text-sm">{employee.nom}</p>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400">
                   Gérant
                 </span>

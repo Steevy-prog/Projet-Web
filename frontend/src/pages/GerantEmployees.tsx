@@ -75,15 +75,15 @@ export function GerantEmployees() {
     }
   };
 
-  const getRoleColor = (role: string) => {
+  const getRoleColor = (role: number) => {
     switch (role) {
-      case 'admin':
+      case 4:
         return 'bg-red-500/20 text-red-400';
-      case 'gerant':
+      case 2:
         return 'bg-blue-500/20 text-blue-400';
-      case 'employe':
+      case 3:
         return 'bg-green-500/20 text-green-400';
-      case 'etudiant':
+      case 1:
         return 'bg-purple-500/20 text-purple-400';
       default:
         return 'bg-primary/20 text-primary';
@@ -301,7 +301,7 @@ export function GerantEmployees() {
                     <div>
                       <h3 className="text-lg text-foreground mb-1">{employee.nom}</h3>
                       <p className="text-sm text-muted-foreground mb-2">{employee.email}</p>
-                      <span className={`px-3 py-1 rounded-full text-xs ${getRoleColor(employee.id_role  == 4 ? 'admin' : employee.id_role === 2 ? 'gerant' : employee.id_role === 3 ? 'employe' : 'etudiant'  )}`}>
+                      <span className={`px-3 py-1 rounded-full text-xs ${getRoleColor(employee.id_role)}`}>
                         {getRoleLabel(employee.id_role)}
                       </span>
                     </div>

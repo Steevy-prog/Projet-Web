@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Employee, OrderWithDetails, Reclamation, Promotion, AppSettings } from './types';
 import {
-  mockOrders,
-  mockReclamations,
   menuItemsStatus,
   MenuItemStatus,
   mockPromotions,
   appSettings,
+  WeeklyStat,
 } from './employeeData';
 
 interface EmployeeContextType {
@@ -33,9 +32,12 @@ interface EmployeeContextType {
   updatePromotion: (promotionId: string, updates: Partial<Promotion>) => void;
   deletePromotion: (promotionId: string) => void;
   settings: AppSettings;
+  weeklystat: WeeklyStat[];
   updateSettings: (updates: Partial<AppSettings>) => void;
   setAllEmployees: (employees: Employee[]) => void;
   setAllOrders: (orders: OrderWithDetails[]) => void;
+  setAllWeeklyOrders: (weeklyOrders: WeeklyStat[]) => void;
+  setAllReclamations: (reclamation: Reclamation[]) => void;
 }
 
 const EmployeeContext = createContext<EmployeeContextType | undefined>(undefined);
@@ -45,17 +47,20 @@ const API_URL = 'http://localhost:8000/api';
 export function EmployeeProvider({ children }: { children: ReactNode }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [orders, setOrders] = useState<OrderWithDetails[]>([]);
-  const [reclamations, setReclamations] = useState<Reclamation[]>(mockReclamations);
+  const [weeklyorders,setWeeklyOrders] = useState<WeeklyStat[]>([]);
+  const [reclamations, setReclamations] = useState<Reclamation[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItemStatus[]>(menuItemsStatus);
   const [employeesList, setEmployeesList] = useState<Employee[]>([]);
   const [promotions, setPromotions] = useState<Promotion[]>(mockPromotions);
   const [settings, setSettings] = useState<AppSettings>(appSettings);
 
+
+
   // Load employee from localStorage on mount
-  useEffect(() => {
-    const storedEmployee = localStorage.getItem('employee');
+useEffect(() => {
+    const storedEmployee = localStorage.getItem('user');
     if (storedEmployee) setEmployee(JSON.parse(storedEmployee));
-  }, []);
+}, []);
 
   // --- LOGIN ---
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -101,6 +106,7 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
     }
   };
 
+
   const addEmployee = async (newEmployee: Employee) => {
     const token = localStorage.getItem('token');
     try {
@@ -134,13 +140,8 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
       console.error(err);
     }
   };
-  const setAllEmployees = (employees: Employee[]) => {
-  setEmployeesList(employees);
-  };
-  const setAllOrders = (orders: OrderWithDetails[]) => {
-  setOrders(orders);
-  };
-  const deleteEmployee = async (employeeId: number) => {
+
+    const deleteEmployee = async (employeeId: number) => {
     const token = localStorage.getItem('token');
     try {
       const res = await fetch(`${API_URL}/employes/${employeeId}`, {
@@ -152,6 +153,18 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error(err);
     }
+  };
+  const setAllEmployees = (employees: Employee[]) => {
+  setEmployeesList(employees);
+  };
+  const setAllOrders = (orders: OrderWithDetails[]) => {
+  setOrders(orders);
+  };
+  const setAllWeeklyOrders = (orders : WeeklyStat[]) =>{
+  setWeeklyOrders(orders)
+  }
+  const setAllReclamations = (reclamation: Reclamation[]) => {
+  setReclamations(reclamation);
   };
 
   // --- OTHER STATE UPDATES ---
@@ -207,9 +220,12 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
         updatePromotion,
         deletePromotion,
         settings,
+        weeklystat : weeklyorders,
         updateSettings,
         setAllEmployees,
         setAllOrders,
+        setAllWeeklyOrders,
+        setAllReclamations,
       }}
     >
       {children}

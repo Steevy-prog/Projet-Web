@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Menu, X, Utensils, ShoppingBag, UtensilsCrossed, MessageSquare, BarChart3, LogOut, Home, MessageCircle } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Utensils,
+  ShoppingBag,
+  UtensilsCrossed,
+  MessageSquare,
+  BarChart3,
+  LogOut,
+  Home,
+  MessageCircle,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useEmployee } from '../lib/employeeContext';
 import { useMessaging } from '../lib/messagingContext';
@@ -15,6 +26,7 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
   const { employee, logout, orders, reclamations } = useEmployee();
   const { getUnreadCount } = useMessaging();
 
+  // --- Handlers ---
   const handleLogout = () => {
     logout();
     onNavigate('employee-login');
@@ -26,10 +38,14 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
     setIsMenuOpen(false);
   };
 
+  // --- Counts ---
   const pendingOrders = orders.filter((order) => order.status === 'pending').length;
   const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
-  const unreadMessagesCount = employee ? getUnreadCount(employee.id, 'employee') : 0;
+const unreadMessagesCount = employee?.id_employe
+  ? getUnreadCount(employee.id_employe.toString(), 'employee')
+  : 0;
 
+  // --- Menu Items ---
   const menuItems = [
     { icon: Home, label: 'Dashboard', page: 'employee-dashboard' },
     { icon: ShoppingBag, label: 'Commandes', page: 'employee-orders', badge: pendingOrders },
@@ -39,39 +55,42 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
     { icon: BarChart3, label: 'Statistiques', page: 'employee-stats' },
   ];
 
-  const getRoleBadgeColor = (role: string) => {
+  // --- Role helpers ---
+  const getRoleBadgeColor = (role: number) => {
     switch (role) {
-      case 'admin':
-        return 'bg-red-500/20 text-red-400';
-      case 'gerant':
-        return 'bg-blue-500/20 text-blue-400';
-      case 'employe':
-        return 'bg-green-500/20 text-green-400';
-      case 'etudiant':
+      case 1:
         return 'bg-purple-500/20 text-purple-400';
+      case 2:
+        return 'bg-blue-500/20 text-blue-400';
+      case 3:
+        return 'bg-green-500/20 text-green-400';
+      case 4:
+        return 'bg-red-500/20 text-red-400';
       default:
         return 'bg-primary/20 text-primary';
     }
   };
 
-  const getRoleLabel = (role: string) => {
+  const getRoleLabel = (role: number) => {
     switch (role) {
-      case 'admin':
-        return 'Admin';
-      case 'gerant':
-        return 'Gérant';
-      case 'employe':
-        return 'Employé';
-      case 'etudiant':
+      case 1:
         return 'Étudiant';
+      case 2:
+        return 'Gérant';
+      case 3:
+        return 'Employé';
+      case 4:
+        return 'Admin';
       default:
-        return role;
+        return 'Inconnu';
     }
   };
 
+  // --- JSX ---
   return (
     <header className="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-lg bg-opacity-95">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* --- Logo / Title --- */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -82,11 +101,12 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
             <Utensils className="size-6 text-primary-foreground" />
           </div>
           <div>
-            <span className="text-primary block">Espace Employé</span>
+            <span className="text-primary block font-semibold">Espace Employé</span>
             <span className="text-xs text-muted-foreground">Restaurant Zeduc-space</span>
           </div>
         </motion.div>
 
+        {/* --- Employee Info & Menu Button --- */}
         <div className="flex items-center gap-4">
           {employee && (
             <motion.div
@@ -95,17 +115,24 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
               className="hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-secondary border border-border"
             >
               <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-sm text-primary">{employee.name.charAt(0)}</span>
+                <span className="text-sm text-primary font-medium">
+                  {employee.nom.charAt(0)}
+                </span>
               </div>
               <div className="text-left">
-                <p className="text-sm">{employee.name}</p>
-                <span className={`text-xs px-2 py-0.5 rounded-full ${getRoleBadgeColor(employee.role)}`}>
-                  {getRoleLabel(employee.role)}
+                <p className="text-sm font-medium">{employee.nom}</p>
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full ${getRoleBadgeColor(
+                    employee.id_role
+                  )}`}
+                >
+                  {getRoleLabel(employee.id_role)}
                 </span>
               </div>
             </motion.div>
           )}
 
+          {/* --- Burger Menu Button --- */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 rounded-2xl bg-secondary hover:bg-primary/20 transition-colors"
@@ -120,6 +147,7 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
         </div>
       </div>
 
+      {/* --- Mobile Menu --- */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -133,6 +161,7 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
                 {menuItems.map((item, index) => {
                   const Icon = item.icon;
                   const isActive = currentPage === item.page;
+
                   return (
                     <motion.button
                       key={item.page}
@@ -150,6 +179,7 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
                         <Icon className="size-5" />
                         <span>{item.label}</span>
                       </div>
+
                       {item.badge && item.badge > 0 && (
                         <Badge className="bg-destructive text-destructive-foreground">
                           {item.badge}
@@ -159,6 +189,7 @@ export function EmployeeHeader({ currentPage, onNavigate }: EmployeeHeaderProps)
                   );
                 })}
 
+                {/* --- Logout Button --- */}
                 <motion.button
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}

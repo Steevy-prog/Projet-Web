@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reclamation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /**
- *
  * @OA\Tag(
- *     name="Reclamation",
+ *     name="Reclamations",
  *     description="API Endpoints for Reclamation Management"
  * )
  *
@@ -27,76 +28,141 @@ use Illuminate\Http\Request;
  *     @OA\Property(property="priorite", type="string", example="moyenne")
  * )
  */
-
 class ReclamController extends Controller
 {
     /**
      * @OA\Get(
      *     path="/api/reclamations",
      *     summary="Get all reclamations",
-     *     description="Returns a list of all reclamations",
      *     tags={"Reclamations"},
      *     @OA\Response(
      *         response=200,
-     *         description="Successful response",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Reclamation")
-     *         )
-     *     ),
-     *     @OA\Response(response=404, description="No reclamation found")
+     *         description="List of all reclamations",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Reclamation"))
+     *     )
      * )
      */
     public function index()
     {
-        //
+        $reclamations = Reclamation::with(['utilisateur', 'commande', 'employe'])->get();
+
+        if ($reclamations->isEmpty()) {
+            return response()->json(['message' => 'No reclamations found'], 404);
+        }
+
+        return response()->json($reclamations, 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/reclamations",
+     *     summary="Create a new reclamation",
+     *     tags={"Reclamations"},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Reclamation")),
+     *     @OA\Response(response=201, description="Reclamation created successfully"),
+     *     @OA\Response(response=400, description="Validation error")
+     * )
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_utilisateur' => 'required|integer|exists:utilisateur,id_utilisateur',
+            'id_commande' => 'nullable|integer|exists:commande,id_commande',
+            'id_employe_traitement' => 'nullable|integer|exists:employe,id_employe',
+            'description' => 'required|string|max:1000',
+            'statut' => 'nullable|string|in:ouverte,en cours,fermee',
+            'reponse' => 'nullable|string',
+            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $data = $validator->validated();
+        $data['statut'] = $data['statut'] ?? 'ouverte';
+
+        $reclamation = Reclamation::create($data);
+
+        return response()->json(['message' => 'Reclamation created successfully', 'reclamation' => $reclamation], 201);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/reclamations/{id}",
+     *     summary="Get a single reclamation by ID",
+     *     tags={"Reclamations"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Reclamation found"),
+     *     @OA\Response(response=404, description="Reclamation not found")
+     * )
      */
     public function show(string $id)
     {
-        //
+        $reclamation = Reclamation::with(['utilisateur', 'commande', 'employe'])->find($id);
+
+        if (!$reclamation) {
+            return response()->json(['message' => 'Reclamation not found'], 404);
+        }
+
+        return response()->json($reclamation, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/reclamations/{id}",
+     *     summary="Update a reclamation",
+     *     tags={"Reclamations"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Reclamation")),
+     *     @OA\Response(response=200, description="Reclamation updated successfully"),
+     *     @OA\Response(response=404, description="Reclamation not found")
+     * )
      */
     public function update(Request $request, string $id)
     {
-        //
+        $reclamation = Reclamation::find($id);
+
+        if (!$reclamation) {
+            return response()->json(['message' => 'Reclamation not found'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'description' => 'nullable|string|max:1000',
+            'statut' => 'nullable|string|in:ouverte,en cours,fermee',
+            'reponse' => 'nullable|string',
+            'priorite' => 'nullable|string|in:basse,moyenne,haute',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $reclamation->update($validator->validated());
+
+        return response()->json(['message' => 'Reclamation updated successfully', 'reclamation' => $reclamation], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/reclamations/{id}",
+     *     summary="Delete a reclamation",
+     *     tags={"Reclamations"},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Reclamation deleted successfully"),
+     *     @OA\Response(response=404, description="Reclamation not found")
+     * )
      */
     public function destroy(string $id)
     {
-        //
+        $reclamation = Reclamation::find($id);
+
+        if (!$reclamation) {
+            return response()->json(['message' => 'Reclamation not found'], 404);
+        }
+
+        $reclamation->delete();
+
+        return response()->json(['message' => 'Reclamation deleted successfully'], 200);
     }
 }

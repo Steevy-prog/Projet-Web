@@ -29,6 +29,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/categories', [CategorieController::class, 'index']);
 Route::get('/promotions', [PromoController::class, 'index']);
+Route::get('/me',[AuthController::class,'me']);
 
 Route::middleware(['auth.jwt'])->group(function () {
 
@@ -44,7 +45,9 @@ Route::middleware(['auth.jwt'])->group(function () {
 
     Route::middleware(['role:2'])->group(function () {
         // Gerant routes
+        Route::apiResource('promotions' , PromoController::class);
         Route::apiResource('employes', EmployeController::class);
+        Route::get('commandes/hebdomadaire',[CommandeController::class, 'weekly']);
         Route::apiResource('commandes', CommandeController::class);
         Route::get('messages/{userId}', [MessageController::class, 'getConversation']);
         Route::post('messages', [MessageController::class, 'store']);

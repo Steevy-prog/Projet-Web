@@ -15,8 +15,8 @@ export function GerantDashboard({ onNavigate }: GerantDashboardProps) {
 
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-  const pendingOrders = orders.filter((order) => order.status === 'pending').length;
-  const pendingReclamations = reclamations.filter((rec) => rec.status === 'pending').length;
+  const pendingOrders = orders.filter((order) => order.status === 'en attente').length;
+  const pendingReclamations = reclamations.filter((rec) => rec.status === 'en attente').length;
   const activeEmployees = employees.filter((emp) => emp.id_role === 3).length;
 
   const stats = [
