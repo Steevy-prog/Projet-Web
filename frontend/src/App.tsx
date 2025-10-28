@@ -41,6 +41,8 @@ import { AdminSettings } from './pages/AdminSettings';
 import { Toaster } from './components/ui/sonner';
 import { Referral } from './pages/Referral';
 import { CookieConsent } from './components/CookieConsent';
+import Payment from './components/payment'; // chemin vers ton fichier PaymentPage.jsx
+
 
 
 function AppContent() {
@@ -158,7 +160,9 @@ function AppContent() {
         return <AdminReclamations />;
       case 'admin-settings':
         return <AdminSettings />;
-      
+      case 'payment':
+      return <Payment />; // ici on appelle la page de paiement
+
       default:
         return <Home {...props} />;
     }

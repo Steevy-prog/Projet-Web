@@ -171,6 +171,19 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
           ))}
         </div>
 
+      
+    <motion.button
+      key="payment"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.2 }} // tu peux ajuster le delay
+      onClick={() => onNavigate("payment")}
+      className="bg-card border border-border rounded-2xl p-6 text-left hover:shadow-lg transition-all hover:scale-105"
+    >
+      Payer maintenant
+    </motion.button>
+
+
         {/* Quick Actions */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
