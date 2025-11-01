@@ -1,25 +1,34 @@
-FROM php:8.4.12-apache
+# ---- Base Image ----
+FROM php:8.4-fpm
 
-# Install dependencies
+
+# Install PostgreSQL PDO extension
 RUN apt-get update && apt-get install -y \
-    git unzip zip libpq-dev libonig-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev && \
-    docker-php-ext-install pdo pdo_mysql mbstring zip gd
+    libpq-dev \
+    && docker-php-ext-install pdo_pgsql
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+    
+# ---- System Dependencies ----
+RUN apt-get update && apt-get install -y \
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip libpq-dev && \
+    docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-# Copy project files
-COPY . /var/www/html
+# ---- Composer ----
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working dir
-WORKDIR /var/www/html
+# ---- Working Directory ----
+WORKDIR /var/www
 
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-RUN composer install
+# ---- Copy Project Files ----
+COPY . .
 
-# Permissions for Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# ---- Install Dependencies ----
+RUN composer install --no-dev --optimize-autoloader
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+# ---- Permissions ----
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
+
+# ---- Expose Port & Start ----
+EXPOSE 9000
+CMD ["php-fpm"]

@@ -1,0 +1,55 @@
+.waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.waves::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgba(22, 0, 0, 0.6);
+  border-radius: 50%;
+  transform: translate3d(
+    calc(var(--xx, 0px) - 50%),
+    calc(var(--yy, 0px) - 50%),
+    0
+  );
+  will-change: transform;
+}
+
+.waves-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* small helper animations */
+@keyframes small-fade {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.waves .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  animation: small-fade 1.6s infinite;
+}
